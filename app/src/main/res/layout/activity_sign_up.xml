@@ -88,36 +88,56 @@
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:id="@+id/genderSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:entries="@array/gender_array"
+                android:prompt="@string/gender_prompt"
+                android:layout_marginBottom="5dp"/>
 
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:drawableTint="#FF4081"
-                    android:hint="Current Weight"
-                    android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="fill_parent"
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/info"
+                    android:layout_marginLeft="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:drawableTint="#FF4081"
-                    android:hint="Goal Weight"
-                    android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
+                    android:textColor="@color/textColor"
+                    android:layout_marginTop="3dp"
+                    android:textSize="11sp"
+                    android:textStyle="italic"
+                    android:text="The amount of calories you should eat per day"/>
+            </LinearLayout>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
 
+                    <RadioButton
+                        android:id="@+id/lose_weight_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:text="Lose Weight (Women: 1500 Cal, Men: 2000 Cal)" />
+
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:text="Gain Weight (Women: 2000 Cal, Men: 2500 Cal)"/>
+
+
+                </RadioGroup>
 
 
             <Button
