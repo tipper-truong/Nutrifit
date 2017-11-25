@@ -1,12 +1,16 @@
 package com.nutrifit.tipper.nutrifit;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -16,11 +20,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
+import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
+import com.nutrifit.tipper.nutrifit.Objects.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+
+import static com.nutrifit.tipper.nutrifit.FitnessGoalsActivity.PREFS_NAME;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -28,6 +37,8 @@ public class SignInActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private ProgressDialog mDialog;
     private LoginButton fbLoginButton;
+    private DatabaseHandler db;
+    public static final String USER = "USER";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -39,6 +50,26 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        db = new DatabaseHandler(this);
+
+        User sessionUser = getUserData();
+
+        try {
+            User dbUser = db.getUser(sessionUser.getEmail());
+            if(dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
+                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                startActivity(i);
+                finish();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+
+        /* For creating/upgrading tables because doing Database db = new DatabaseHandler(); doesn't create new tables or upgrade it for some reason */
+        SQLiteDatabase database = new DatabaseHandler(getApplicationContext()).getWritableDatabase();
+        database.close();
 
         newUserSignUpButton = (Button) findViewById(R.id.newUser_SignUp);
 
@@ -108,13 +139,58 @@ public class SignInActivity extends AppCompatActivity {
     {
         try {
 
-            Log.v("Email", object.getString("email"));
-            Log.v("First Name", object.getString("first_name"));
-            Log.v("Last Name", object.getString("last_name"));
-            Log.v("Gender", object.getString("gender"));
+            String firstName = object.getString("first_name");
+            String lastName = object.getString("last_name");
+            String email = object.getString("email");
+            String gender = object.getString("gender");
 
+            User user = new User(firstName, lastName, email, null, gender, null, 0);
+            boolean userExist = db.addUser(user);
+            if(!userExist) {
+                saveUserData(getApplicationContext(), user);
+                Intent i = new Intent(SignInActivity.this, FitnessGoalsActivity.class);
+                startActivity(i);
+                finish();
+            } else {
+                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                startActivity(i);
+                finish();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private void saveUserData(Context context, User user) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String userObj = gson.toJson(user);
+
+        editor.putString(USER, userObj);
+        editor.commit();
+    }
+
+    private User getUserData()
+    {
+        SharedPreferences settings;
+        settings = getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(PREFS_NAME, null);
+        User retUser = gson.fromJson(userObj, User.class);
+        return retUser;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(db != null) {
+            db.close();
         }
     }
 

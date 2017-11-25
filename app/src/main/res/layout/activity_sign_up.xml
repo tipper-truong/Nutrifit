@@ -41,6 +41,7 @@
                     android:layout_height="wrap_content"
                     android:drawableTint="#FF4081"
                     android:singleLine="true"
+                    android:id="@+id/signUp_firstName"
                     android:hint="First Name"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
@@ -54,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
+                    android:id="@+id/signUp_lastName"
                     android:drawableTint="#FF4081"
                     android:hint="Last Name"
                     android:inputType="text" />
@@ -68,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
+                    android:id="@+id/signUp_email"
                     android:drawableTint="#FF4081"
                     android:hint="Email"
                     android:inputType="textEmailAddress" />
@@ -83,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
+                    android:id="@+id/signUp_password"
                     android:drawableTint="#FF4081"
                     android:hint="Password"
                     android:inputType="textPassword" />
@@ -114,27 +118,27 @@
                     android:layout_marginTop="3dp"
                     android:textSize="11sp"
                     android:textStyle="italic"
-                    android:text="The amount of calories you should eat per day"/>
+                    android:text="User will be assigned calorie intake per day based on gender and fitness goals"/>
             </LinearLayout>
 
                 <RadioGroup
+                    android:id="@+id/signUp_fitnesssGoals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
 
                     <RadioButton
-                        android:id="@+id/lose_weight_radio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"
-                        android:text="Lose Weight (Women: 1500 Cal, Men: 2000 Cal)" />
+                        android:text="Lose Weight" />
 
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"
-                        android:text="Gain Weight (Women: 2000 Cal, Men: 2500 Cal)"/>
+                        android:text="Gain Weight"/>
 
 
                 </RadioGroup>
@@ -144,11 +148,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
+                android:id="@+id/signUp"
                 android:background="@color/light_blue"
                 android:text="Sign up"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
+
         </LinearLayout>
     </RelativeLayout>
 

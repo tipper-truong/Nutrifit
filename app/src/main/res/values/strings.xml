@@ -6,7 +6,6 @@
     <string name="fb_login_protocol_scheme">fb711448959047629</string>
 
 
-
     <string-array name="gender_array">
         <item>"Choose your gender"</item>
         <item>Male</item>
