@@ -18,6 +18,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
@@ -53,19 +54,8 @@ public class SignInActivity extends AppCompatActivity {
 
         db = new DatabaseHandler(this);
 
-        User sessionUser = getUserData();
-
-        try {
-            User dbUser = db.getUser(sessionUser.getEmail());
-            if(dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
-                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
-                startActivity(i);
-                finish();
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
+        /** If user already signed in, just direct them to Home Page **/
+        sessionUser();
 
         /* For creating/upgrading tables because doing Database db = new DatabaseHandler(); doesn't create new tables or upgrade it for some reason */
         SQLiteDatabase database = new DatabaseHandler(getApplicationContext()).getWritableDatabase();
@@ -78,6 +68,25 @@ public class SignInActivity extends AppCompatActivity {
 
         /* Facebook Login */
         facebookLogin();
+    }
+
+    private void sessionUser()
+    {
+        User sessionUser = getUserData();
+
+        try {
+            User dbUser = db.getUser(sessionUser.getEmail());
+            if(dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
+                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                startActivity(i);
+                finish();
+            } else {
+                // Log out from Facebook
+                LoginManager.getInstance().logOut();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     private void signUp()

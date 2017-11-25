@@ -49,8 +49,6 @@ public class FitnessGoalsActivity extends AppCompatActivity {
             }
         });
 
-
-
         /** Submit New User Information **/
         Button submitFitnessGoalsButton = (Button) findViewById(R.id.submitFitnessGoals);
         submitFitnessGoalsButton.setOnClickListener(new View.OnClickListener() {
