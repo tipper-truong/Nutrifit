@@ -7,7 +7,7 @@
 
 
     <string-array name="gender_array">
-        <item>"Choose your gender"</item>
+        <item>Choose your gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

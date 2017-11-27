@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.nutrifit.tipper.nutrifit.Objects.User;
+import com.nutrifit.tipper.nutrifit.SignUpActivity;
 
 import java.util.*;
 
@@ -83,7 +84,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     /********** USER QUERIES **********/
 
-    public boolean addUser(User user)
+    public boolean addUser(User user, Context context)
     {
         boolean userExist = false;
 
@@ -102,6 +103,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.insertOrThrow(TABLE_USER, null, values);
         } catch (SQLiteConstraintException e) {
             userExist = true;
+            Toast.makeText(context, "User already exist, please try again", Toast.LENGTH_SHORT);
             e.printStackTrace();
         }
 

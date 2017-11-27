@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -28,18 +29,19 @@ import com.nutrifit.tipper.nutrifit.Objects.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-
-import static com.nutrifit.tipper.nutrifit.FitnessGoalsActivity.PREFS_NAME;
 
 public class SignInActivity extends AppCompatActivity {
 
+    private Button signInButton;
     private Button newUserSignUpButton;
+    private EditText signInEmail;
+    private EditText signInPW;
     private CallbackManager callbackManager;
     private ProgressDialog mDialog;
     private LoginButton fbLoginButton;
     private DatabaseHandler db;
     public static final String USER = "USER";
+    public static final String BOOLEAN_SIGNUP = "SIGN_UP";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,7 +63,35 @@ public class SignInActivity extends AppCompatActivity {
         SQLiteDatabase database = new DatabaseHandler(getApplicationContext()).getWritableDatabase();
         database.close();
 
+        signInEmail = (EditText) findViewById(R.id.signIn_email);
+        signInPW = (EditText) findViewById(R.id.signIn_password);
+        signInButton = (Button) findViewById(R.id.signInButton);
         newUserSignUpButton = (Button) findViewById(R.id.newUser_SignUp);
+
+        /* Checking user credentials when signing in */
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = signInEmail.getText().toString();
+                User retUser = db.getUser(email);
+                String password = signInPW.getText().toString();
+                String retPassword = retUser.getPassword();
+
+                Log.v("Email", email);
+                Log.v("Password", password);
+                Log.v("DB Email", retUser.getEmail());
+                Log.v("DB Password", retPassword);
+                if(retUser.getEmail().equals(email) && retPassword.equals(password)) {
+                    Intent i = new Intent(v.getContext(), SearchRecipeActivity.class);
+                    startActivity(i);
+                    //finish();
+                    saveSignUpFirstTime(SignInActivity.this);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "User credentials incorrect, please try again", Toast.LENGTH_SHORT);
+                }
+            }
+        });
 
         /* New User? Sign up */
         signUp();
@@ -72,20 +102,21 @@ public class SignInActivity extends AppCompatActivity {
 
     private void sessionUser()
     {
-        User sessionUser = getUserData();
-
-        try {
-            User dbUser = db.getUser(sessionUser.getEmail());
-            if(dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
-                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
-                startActivity(i);
-                finish();
-            } else {
-                // Log out from Facebook
-                LoginManager.getInstance().logOut();
+        if(!signUpFirstTime()) {
+            User sessionUser = getUserData();
+            try {
+                User dbUser = db.getUser(sessionUser.getEmail());
+                if (dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
+                    Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    // Log out from Facebook
+                    LoginManager.getInstance().logOut();
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
     }
 
@@ -154,7 +185,7 @@ public class SignInActivity extends AppCompatActivity {
             String gender = object.getString("gender");
 
             User user = new User(firstName, lastName, email, null, gender, null, 0);
-            boolean userExist = db.addUser(user);
+            boolean userExist = db.addUser(user, SignInActivity.this);
             if(!userExist) {
                 saveUserData(getApplicationContext(), user);
                 Intent i = new Intent(SignInActivity.this, FitnessGoalsActivity.class);
@@ -187,12 +218,35 @@ public class SignInActivity extends AppCompatActivity {
     private User getUserData()
     {
         SharedPreferences settings;
-        settings = getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        settings = getApplicationContext().getSharedPreferences(USER, Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String userObj = settings.getString(PREFS_NAME, null);
+        String userObj = settings.getString(USER, null);
         User retUser = gson.fromJson(userObj, User.class);
         return retUser;
     }
+
+    private void saveSignUpFirstTime(Context context)
+    {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(BOOLEAN_SIGNUP, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        boolean signUpFirstTime = false;
+
+        editor.putBoolean(BOOLEAN_SIGNUP, signUpFirstTime);
+        editor.commit();
+    }
+
+
+    private boolean signUpFirstTime()
+    {
+        SharedPreferences settings;
+        settings = getApplicationContext().getSharedPreferences(BOOLEAN_SIGNUP, Context.MODE_PRIVATE);
+        boolean signUpFirstTime = settings.getBoolean(BOOLEAN_SIGNUP, true);
+        return signUpFirstTime;
+    }
+
 
     @Override
     public void onDestroy()

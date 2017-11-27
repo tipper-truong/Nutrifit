@@ -100,11 +100,11 @@ public class FitnessGoalsActivity extends AppCompatActivity {
         } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Lose Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(2000);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2500", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2000", Toast.LENGTH_SHORT);
         } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Gain Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(2500);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 1500", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2500", Toast.LENGTH_SHORT);
         }
 
     }
