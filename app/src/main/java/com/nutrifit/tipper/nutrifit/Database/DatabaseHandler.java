@@ -11,13 +11,9 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
-import com.nutrifit.tipper.nutrifit.Objects.User;
-import com.nutrifit.tipper.nutrifit.SignUpActivity;
-
-import java.util.*;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 //import com.google.gson.Gson;
 //import com.google.gson.reflect.TypeToken;

@@ -24,7 +24,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
-import com.nutrifit.tipper.nutrifit.Objects.User;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;

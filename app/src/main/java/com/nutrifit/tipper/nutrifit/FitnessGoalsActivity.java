@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
-import com.nutrifit.tipper.nutrifit.Objects.User;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 public class FitnessGoalsActivity extends AppCompatActivity {
 

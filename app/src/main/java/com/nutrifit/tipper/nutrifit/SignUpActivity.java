@@ -16,11 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
-import com.nutrifit.tipper.nutrifit.Objects.User;
-
-import javax.crypto.SecretKey;
-
-import static com.nutrifit.tipper.nutrifit.FitnessGoalsActivity.PREFS_NAME;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 public class SignUpActivity extends AppCompatActivity {
 
