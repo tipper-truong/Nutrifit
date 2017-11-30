@@ -1,5 +1,6 @@
 package com.nutrifit.tipper.nutrifit;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,16 @@ public class SearchRecipeActivity extends AppCompatActivity {
 
         recipeList = new ArrayList<Recipe>();
         requestQueue = Volley.newRequestQueue(this);
+
+        FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+        if (fragment == null) {
+            fragment = new CardFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragmentContainer, fragment)
+                    .commit();
+        }
 
         // retrieve recipe data
         // retrieveRecipeData();
