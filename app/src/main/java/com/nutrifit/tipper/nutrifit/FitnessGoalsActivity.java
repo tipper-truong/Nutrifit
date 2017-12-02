@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -28,6 +29,8 @@ public class FitnessGoalsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fitness_goals);
+
+        getSupportActionBar().hide();
 
         db = new DatabaseHandler(this);
 
@@ -54,7 +57,7 @@ public class FitnessGoalsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db.updateUser(user);
-                Intent i = new Intent(getApplicationContext(), SearchRecipeActivity.class);
+                Intent i = new Intent(getApplicationContext(), NutrifitActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -91,19 +94,27 @@ public class FitnessGoalsActivity extends AppCompatActivity {
         if(gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Lose Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(1500);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 1500", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(FitnessGoalsActivity.this, "Calories Intake Per Day: 1500", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
         } else if (gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Gain Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(2000);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2000", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(FitnessGoalsActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
         } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Lose Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(2000);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2000", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(FitnessGoalsActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
         } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Gain Weight")) {
             user.setFitnessGoals(selectedFitnessGoals);
             user.setCaloriesToBurnPerDay(2500);
-            Toast.makeText(getApplicationContext(), "Calories Intake Per Day: 2500", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(FitnessGoalsActivity.this, "Calories Intake Per Day: 2500", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
         }
 
     }

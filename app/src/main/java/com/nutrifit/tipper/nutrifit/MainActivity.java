@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         // getKeyHash --> For Facebook Login API
 
         new Handler().postDelayed(new Runnable() {

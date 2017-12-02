@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        getSupportActionBar().hide();
+
         db = new DatabaseHandler(this);
 
         firstName = (EditText) findViewById(R.id.signUp_firstName);
@@ -69,22 +72,32 @@ public class SignUpActivity extends AppCompatActivity {
                 String gender = genderSpinner.getItemAtPosition(genderSpinner.getSelectedItemPosition()).toString();
                 if(!gender.equals("Choose your gender")) {
                     if(gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Lose Weight")) {
-                        Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 1500", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 1500", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                         user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 1500);
                     } else if (gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Gain Weight")) {
-                        Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                         user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000);
                     } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Lose Weight")) {
-                        Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                         user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000);
                     } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Gain Weight")) {
-                        Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2500", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2500", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                         user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2500);
                     }
                     saveUserData(getApplicationContext(), user);
                     boolean userExist = db.addUser(user, SignUpActivity.this);
                     if(userExist) {
-                        Toast.makeText(SignUpActivity.this, "User already exist, please try again", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SignUpActivity.this, "User already exist, please try again", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                     }
 
                     saveSignUpFirstTime(SignUpActivity.this);
@@ -95,7 +108,9 @@ public class SignUpActivity extends AppCompatActivity {
                     db.close();
 
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Please select a gender", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(SignUpActivity.this, "Please select a gender", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
                 }
             }
         });

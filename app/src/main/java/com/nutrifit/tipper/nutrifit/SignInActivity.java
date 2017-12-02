@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,6 +55,8 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        getSupportActionBar().hide();
+
         db = new DatabaseHandler(this);
 
         /** If user already signed in, just direct them to Home Page **/
@@ -74,21 +77,32 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = signInEmail.getText().toString();
                 User retUser = db.getUser(email);
-                String password = signInPW.getText().toString();
-                String retPassword = retUser.getPassword();
+                if(retUser != null) {
+                    String password = signInPW.getText().toString();
+                    String retPassword = retUser.getPassword();
 
-                Log.v("Email", email);
-                Log.v("Password", password);
-                Log.v("DB Email", retUser.getEmail());
-                Log.v("DB Password", retPassword);
-                if(retUser.getEmail().equals(email) && retPassword.equals(password)) {
-                    Intent i = new Intent(v.getContext(), SearchRecipeActivity.class);
-                    startActivity(i);
-                    //finish();
-                    saveSignUpFirstTime(SignInActivity.this);
+                    try {
 
+                        if (retUser.getEmail().equals(email) && retPassword.equals(password)) {
+                            Intent i = new Intent(v.getContext(), NutrifitActivity.class);
+                            startActivity(i);
+                            //finish();
+                            saveSignUpFirstTime(SignInActivity.this);
+
+                        } else {
+                            Toast toast = Toast.makeText(SignInActivity.this, "User credentials incorrect, please try again", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.TOP, 0, 0);
+                            toast.show();
+                        }
+                    } catch (NullPointerException e) {
+                        Toast toast = Toast.makeText(SignInActivity.this, "User credentials does not exist, please sign up", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "User credentials incorrect, please try again", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(SignInActivity.this, "User credentials does not exist, please sign up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
                 }
             }
         });
@@ -107,7 +121,7 @@ public class SignInActivity extends AppCompatActivity {
             try {
                 User dbUser = db.getUser(sessionUser.getEmail());
                 if (dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
-                    Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                    Intent i = new Intent(SignInActivity.this, NutrifitActivity.class);
                     startActivity(i);
                     finish();
                 } else {
@@ -192,7 +206,7 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             } else {
-                Intent i = new Intent(SignInActivity.this, SearchRecipeActivity.class);
+                Intent i = new Intent(SignInActivity.this, NutrifitActivity.class);
                 startActivity(i);
                 finish();
             }
