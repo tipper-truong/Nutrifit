@@ -2,7 +2,9 @@ package com.nutrifit.tipper.nutrifit;
 
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -11,15 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.mindorks.placeholderview.SwipeDecor;
+import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.nutrifit.tipper.nutrifit.Model.Recipe;
 
 import org.json.JSONArray;
@@ -27,12 +33,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NutrifitActivity extends AppCompatActivity {
 
-    private ArrayList<Recipe> recipeList;
-    private RequestQueue requestQueue;
-    private static String RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=e8611421&_app_key=7102c1ff2ffc74cf805a8bee8b7281a8&q=healthy%20pho";
+    private SwipePlaceHolderView mSwipeView;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,63 @@ public class NutrifitActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#60b0f4")));
 
-        FragmentManager fm = getSupportFragmentManager();
+        mSwipeView = (SwipePlaceHolderView)findViewById(R.id.swipeView);
+        mContext = getApplicationContext();
+
+        int bottomMargin = Utils.dpToPx(160);
+        Point windowSize = Utils.getDisplaySize(getWindowManager());
+        mSwipeView.getBuilder()
+                .setDisplayViewCount(3)
+                .setIsUndoEnabled(true)
+                .setHeightSwipeDistFactor(10)
+                .setWidthSwipeDistFactor(5)
+                .setSwipeDecor(new SwipeDecor()
+                        .setViewWidth(windowSize.x)
+                        .setViewHeight(windowSize.y - bottomMargin)
+                        .setViewGravity(Gravity.TOP)
+                        .setPaddingTop(20)
+                        .setRelativeScale(0.01f)
+                        .setSwipeMaxChangeAngle(2f)
+                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
+                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
+
+        Utils utils = new Utils(this.getApplicationContext(), "pho");
+        utils.loadRecipeData(new CallBack() {
+            @Override
+            public void onSuccess(ArrayList<Recipe> recipeList) {
+                for(Recipe recipe : recipeList) {
+                    mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView));
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+
+            }
+        });
+
+        findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwipeView.doSwipe(false);
+            }
+        });
+
+        findViewById(R.id.acceptBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwipeView.doSwipe(true);
+            }
+        });
+
+        findViewById(R.id.undoBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwipeView.undoLastSwipe();
+            }
+        });
+
+        /*FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
@@ -50,7 +112,7 @@ public class NutrifitActivity extends AppCompatActivity {
             fm.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
-        }
+        }*/
 
 
         //recipeList = new ArrayList<Recipe>();
@@ -82,52 +144,5 @@ public class NutrifitActivity extends AppCompatActivity {
         return true;
     }
 
-    private void retrieveRecipeData()
-    {
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, RECIPE_URL, null,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // display response
-                        try {
-                            parseRecipeData(response);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        );
-
-        requestQueue.add(getRequest);
-    }
-
-
-    private void parseRecipeData(JSONObject response) throws JSONException {
-        JSONArray matchesArray = response.getJSONArray("matches");
-        for(int i = 0; i < matchesArray.length(); i++) {
-            String recipeID = matchesArray.getJSONObject(i).getString("id");
-            String recipeName = matchesArray.getJSONObject(i).getString("recipeName");
-            String imageUrls = matchesArray.getJSONObject(i).getJSONObject("imageUrlsBySize").getString("90");
-            String smallImageUrl = matchesArray.getJSONObject(i).getString("smallImageUrls");
-            String sourceDisplayName = matchesArray.getJSONObject(i).getString("sourceDisplayName");
-            ArrayList<String> ingredients = new ArrayList<String>();
-            JSONArray ingredientsArray = matchesArray.getJSONObject(i).getJSONArray("ingredients");
-            for(int j = 0; j < ingredientsArray.length(); j++) {
-                ingredients.add(ingredientsArray.get(j).toString());
-            }
-            int totalTimeInSeconds = matchesArray.getJSONObject(i).getInt("totalTimeInSeconds");
-            int rating = matchesArray.getJSONObject(i).getInt("rating");
-            Recipe recipe = new Recipe(recipeID, recipeName, imageUrls, smallImageUrl, sourceDisplayName, ingredients, totalTimeInSeconds, rating);
-            recipeList.add(recipe);
-        }
-
-    }
 }
+
