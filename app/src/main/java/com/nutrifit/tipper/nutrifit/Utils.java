@@ -37,7 +37,7 @@ public class Utils {
     private ArrayList<Recipe> recipeList;
     private RequestQueue requestQueue;
     private String recipeName;
-    private static String RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=e8611421&_app_key=7102c1ff2ffc74cf805a8bee8b7281a8&q=healthy%20pho";
+    private static String RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=e8611421&_app_key=7102c1ff2ffc74cf805a8bee8b7281a8&q=healthy%20";
 
     public Utils(Context context, String recipeName)
     {
@@ -69,7 +69,8 @@ public class Utils {
 
     public void loadRecipeData(final CallBack onCallBack)
     {
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, RECIPE_URL, null,
+        String url = RECIPE_URL + recipeName;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
                 {
                     @Override

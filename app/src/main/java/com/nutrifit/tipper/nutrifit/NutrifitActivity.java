@@ -6,6 +6,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -18,35 +24,51 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import android.widget.Toast;
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.nutrifit.tipper.nutrifit.Model.Recipe;
+import java.util.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-public class NutrifitActivity extends AppCompatActivity {
+public class NutrifitActivity extends AppCompatActivity implements SensorEventListener {
 
     private SwipePlaceHolderView mSwipeView;
     private Context mContext;
+    int count = 1;
+    private boolean init;
+    private Sensor mAccelerometer;
+    private SensorManager mSensorManager;
+    private float x1, x2, x3;
+    private static final float ERROR = (float) 7.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nutrifit);
 
+        this.setTitle("Search for Healthy Recipes");
+
+
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#60b0f4")));
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_favorites:
+                                break;
+                            case R.id.action_schedules:
+                                break;
+                            case R.id.action_music:
+                                break;
+                        }
+                        return false;
+                    }
+                });
 
         mSwipeView = (SwipePlaceHolderView)findViewById(R.id.swipeView);
         mContext = getApplicationContext();
@@ -68,57 +90,10 @@ public class NutrifitActivity extends AppCompatActivity {
                         .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
 
-        Utils utils = new Utils(this.getApplicationContext(), "pho");
-        utils.loadRecipeData(new CallBack() {
-            @Override
-            public void onSuccess(ArrayList<Recipe> recipeList) {
-                for(Recipe recipe : recipeList) {
-                    mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView));
-                }
-            }
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
-            @Override
-            public void onFail(String msg) {
-
-            }
-        });
-
-        findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwipeView.doSwipe(false);
-            }
-        });
-
-        findViewById(R.id.acceptBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwipeView.doSwipe(true);
-            }
-        });
-
-        findViewById(R.id.undoBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwipeView.undoLastSwipe();
-            }
-        });
-
-        /*FragmentManager fm = getSupportFragmentManager();
-        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-
-        if (fragment == null) {
-            fragment = new CardFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
-        }*/
-
-
-        //recipeList = new ArrayList<Recipe>();
-        //requestQueue = Volley.newRequestQueue(this);
-        // retrieve recipe data
-        // retrieveRecipeData();
     }
 
     @Override
@@ -133,6 +108,45 @@ public class NutrifitActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Toast toast = Toast.makeText(NutrifitActivity.this, "Added " + query + " to your recipe search list", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                Utils utils = new Utils(NutrifitActivity.this, query);
+                utils.loadRecipeData(new CallBack() {
+                    @Override
+                    public void onSuccess(ArrayList<Recipe> recipeList) {
+                        for(Recipe recipe : recipeList) {
+                            mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView));
+                        }
+                    }
+
+                    @Override
+                    public void onFail(String msg) {
+
+                    }
+                });
+
+                /*findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mSwipeView.doSwipe(false);
+                    }
+                });
+
+                findViewById(R.id.acceptBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mSwipeView.doSwipe(true);
+                    }
+                });
+
+                findViewById(R.id.undoBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mSwipeView.undoLastSwipe();
+                    }
+                });*/
+
                 return false;
             }
 
@@ -144,5 +158,71 @@ public class NutrifitActivity extends AppCompatActivity {
         return true;
     }
 
+    // Code citation: http://code2care.org/2015/detect-phone-shakes-android-programming/
+    @Override
+    public void onSensorChanged(SensorEvent e) {
+        //Get x,y and z values
+        float x,y,z;
+        x = e.values[0];
+        y = e.values[1];
+        z = e.values[2];
+
+
+        if (!init) {
+            x1 = x;
+            x2 = y;
+            x3 = z;
+            init = true;
+        } else {
+
+            float diffX = Math.abs(x1 - x);
+            float diffY = Math.abs(x2 - y);
+            float diffZ = Math.abs(x3 - z);
+
+            //Handling ACCELEROMETER Noise
+            if (diffX < ERROR) {
+
+                diffX = (float) 0.0;
+            }
+            if (diffY < ERROR) {
+                diffY = (float) 0.0;
+            }
+            if (diffZ < ERROR) {
+
+                diffZ = (float) 0.0;
+            }
+
+
+            x1 = x;
+            x2 = y;
+            x3 = z;
+
+
+            //Horizontal Shake Detected!
+            if (diffX > diffY) {
+
+                mSwipeView.undoLastSwipe();
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    //Register the Listener when the Activity is resumed
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    //Unregister the Listener when the Activity is paused
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
 }
 
