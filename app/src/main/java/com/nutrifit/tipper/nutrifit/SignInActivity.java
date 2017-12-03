@@ -120,7 +120,9 @@ public class SignInActivity extends AppCompatActivity {
             User sessionUser = getUserData();
             try {
                 User dbUser = db.getUser(sessionUser.getEmail());
+
                 if (dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
+                    Log.v("User", "Session Passed");
                     Intent i = new Intent(SignInActivity.this, NutrifitActivity.class);
                     startActivity(i);
                     finish();
@@ -202,6 +204,7 @@ public class SignInActivity extends AppCompatActivity {
             boolean userExist = db.addUser(user, SignInActivity.this);
             if(!userExist) {
                 saveUserData(getApplicationContext(), user);
+                saveSignUpFirstTime(getApplicationContext());
                 Intent i = new Intent(SignInActivity.this, FitnessGoalsActivity.class);
                 startActivity(i);
                 finish();

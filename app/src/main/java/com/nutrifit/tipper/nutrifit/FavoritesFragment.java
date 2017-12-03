@@ -1,5 +1,4 @@
 package com.nutrifit.tipper.nutrifit;
-
         import android.content.ContentResolver;
         import android.content.Context;
         import android.content.Intent;
@@ -25,8 +24,6 @@ package com.nutrifit.tipper.nutrifit;
         import com.squareup.picasso.Picasso;
 
         import java.util.ArrayList;
-
-
 
 public class FavoritesFragment extends Fragment {
 
