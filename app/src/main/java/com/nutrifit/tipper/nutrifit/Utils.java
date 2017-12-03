@@ -70,7 +70,8 @@ public class Utils {
 
     public void loadRecipeData(final CallBack onCallBack)
     {
-        String url = RECIPE_URL + recipeName;
+        String url = RECIPE_URL + recipeName.replaceAll(" ", "%20");
+        Log.v("URL", url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
                 {
@@ -101,21 +102,26 @@ public class Utils {
 
     private void parseRecipeData(JSONObject response) throws JSONException {
         JSONArray matchesArray = response.getJSONArray("matches");
-        for(int i = 0; i < matchesArray.length(); i++) {
-            String recipeID = matchesArray.getJSONObject(i).getString("id");
-            String recipeName = matchesArray.getJSONObject(i).getString("recipeName");
-            String imageUrls = matchesArray.getJSONObject(i).getJSONObject("imageUrlsBySize").getString("90");
-            String sourceDisplayName = matchesArray.getJSONObject(i).getString("sourceDisplayName");
-            ArrayList<String> ingredients = new ArrayList<String>();
-            JSONArray ingredientsArray = matchesArray.getJSONObject(i).getJSONArray("ingredients");
-            for(int j = 0; j < ingredientsArray.length(); j++) {
-                ingredients.add(ingredientsArray.get(j).toString());
+        try {
+            for (int i = 0; i < matchesArray.length(); i++) {
+                String recipeID = matchesArray.getJSONObject(i).getString("id");
+                String recipeName = matchesArray.getJSONObject(i).getString("recipeName");
+                String imageUrls = matchesArray.getJSONObject(i).getJSONObject("imageUrlsBySize").getString("90");
+                String sourceDisplayName = matchesArray.getJSONObject(i).getString("sourceDisplayName");
+                ArrayList<String> ingredients = new ArrayList<String>();
+                JSONArray ingredientsArray = matchesArray.getJSONObject(i).getJSONArray("ingredients");
+                for (int j = 0; j < ingredientsArray.length(); j++) {
+                    ingredients.add(ingredientsArray.get(j).toString());
+                }
+                int totalTimeInSeconds = matchesArray.getJSONObject(i).getInt("totalTimeInSeconds");
+                int rating = matchesArray.getJSONObject(i).getInt("rating");
+                Recipe recipe = new Recipe(recipeID, recipeName, imageUrls, sourceDisplayName, ingredients, totalTimeInSeconds, rating);
+                Log.v("Recipe Name", recipe.getRecipeName());
+                recipeList.add(recipe);
             }
-            int totalTimeInSeconds = matchesArray.getJSONObject(i).getInt("totalTimeInSeconds");
-            int rating = matchesArray.getJSONObject(i).getInt("rating");
-            Recipe recipe = new Recipe(recipeID, recipeName, imageUrls, sourceDisplayName, ingredients, totalTimeInSeconds, rating);
-            Log.v("Recipe Name", recipe.getRecipeName());
-            recipeList.add(recipe);
+        } catch (JSONException e) {
+            Log.v("Parse Error", "Could not parse JSON Value properly");
+            e.printStackTrace();
         }
 
 
