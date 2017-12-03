@@ -4,6 +4,7 @@ package com.nutrifit.tipper.nutrifit;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -27,9 +28,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.nutrifit.tipper.nutrifit.Model.Recipe;
+import com.nutrifit.tipper.nutrifit.Model.User;
+
 import java.util.*;
 
 public class NutrifitActivity extends AppCompatActivity implements SensorEventListener {
@@ -41,7 +46,9 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
     private Sensor mAccelerometer;
     private SensorManager mSensorManager;
     private float x1, x2, x3;
+    public static final String USER = "USER";
     private static final float ERROR = (float) 7.0;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
 
         this.setTitle("Search for Healthy Recipes");
 
+        user = getUserData();
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#60b0f4")));
@@ -71,12 +79,12 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                                 break;
                             case R.id.action_favorites:
                                 getSupportActionBar().hide();
+                                mSwipeView.removeAllViews();
                                 FragmentManager fm = getSupportFragmentManager();
                                 Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
                                 if (fragment == null) {
                                     fragment = new FavoritesFragment();
-                                    ;
                                     fm.beginTransaction()
                                             .add(R.id.fragmentContainer, fragment)
                                             .commit();
@@ -129,7 +137,7 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast toast = Toast.makeText(NutrifitActivity.this, "Added " + query + " to your recipe search list", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(NutrifitActivity.this, "Added " + query + "to your recipe search list", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 Utils utils = new Utils(NutrifitActivity.this, query);
@@ -137,6 +145,7 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                     @Override
                     public void onSuccess(ArrayList<Recipe> recipeList) {
                         for(Recipe recipe : recipeList) {
+                            recipe.setUserID(user.getId());
                             mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView));
                         }
                     }
@@ -146,27 +155,6 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
 
                     }
                 });
-
-                /*findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mSwipeView.doSwipe(false);
-                    }
-                });
-
-                findViewById(R.id.acceptBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mSwipeView.doSwipe(true);
-                    }
-                });
-
-                findViewById(R.id.undoBtn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mSwipeView.undoLastSwipe();
-                    }
-                });*/
 
                 return false;
             }
@@ -233,6 +221,17 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+    private User getUserData()
+    {
+        SharedPreferences settings;
+        settings = getApplicationContext().getSharedPreferences(USER, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(USER, null);
+        User retUser = gson.fromJson(userObj, User.class);
+        return retUser;
+    }
+
 
     //Register the Listener when the Activity is resumed
     protected void onResume() {

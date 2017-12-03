@@ -19,7 +19,9 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeView;
+import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
 import com.nutrifit.tipper.nutrifit.Model.Recipe;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -43,11 +45,15 @@ public class TinderCard {
     private Recipe mRecipe;
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
+    private DatabaseHandler db;
+    private User user;
 
     public TinderCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView) {
+        db = new DatabaseHandler(context);
         mContext = context;
         mRecipe = recipe;
         mSwipeView = swipeView;
+        this.user = user;
     }
 
     @Resolve
@@ -95,6 +101,7 @@ public class TinderCard {
     @SwipeIn
     private void onSwipeIn(){
         Log.d("EVENT", "onSwipedIn");
+        db.addRecipe(mRecipe);
     }
 
     @SwipeInState

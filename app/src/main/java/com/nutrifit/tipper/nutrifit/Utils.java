@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nutrifit.tipper.nutrifit.Model.Recipe;
+import com.nutrifit.tipper.nutrifit.Model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,7 +105,6 @@ public class Utils {
             String recipeID = matchesArray.getJSONObject(i).getString("id");
             String recipeName = matchesArray.getJSONObject(i).getString("recipeName");
             String imageUrls = matchesArray.getJSONObject(i).getJSONObject("imageUrlsBySize").getString("90");
-            String smallImageUrl = matchesArray.getJSONObject(i).getString("smallImageUrls");
             String sourceDisplayName = matchesArray.getJSONObject(i).getString("sourceDisplayName");
             ArrayList<String> ingredients = new ArrayList<String>();
             JSONArray ingredientsArray = matchesArray.getJSONObject(i).getJSONArray("ingredients");
@@ -113,7 +113,7 @@ public class Utils {
             }
             int totalTimeInSeconds = matchesArray.getJSONObject(i).getInt("totalTimeInSeconds");
             int rating = matchesArray.getJSONObject(i).getInt("rating");
-            Recipe recipe = new Recipe(recipeID, recipeName, imageUrls, smallImageUrl, sourceDisplayName, ingredients, totalTimeInSeconds, rating);
+            Recipe recipe = new Recipe(recipeID, recipeName, imageUrls, sourceDisplayName, ingredients, totalTimeInSeconds, rating);
             Log.v("Recipe Name", recipe.getRecipeName());
             recipeList.add(recipe);
         }
