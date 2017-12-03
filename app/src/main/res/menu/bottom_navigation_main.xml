@@ -29,4 +29,5 @@
         android:icon="@drawable/workout_icon"
         android:title="Workout"
         app:showAsAction="always|withText"/>
+
 </menu>

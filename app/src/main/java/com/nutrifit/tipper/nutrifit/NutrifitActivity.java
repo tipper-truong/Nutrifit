@@ -3,6 +3,7 @@ package com.nutrifit.tipper.nutrifit;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -63,8 +65,22 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_search:
+                                getSupportActionBar().show();
+                                Intent i = new Intent(NutrifitActivity.this, NutrifitActivity.class);
+                                startActivity(i);
                                 break;
                             case R.id.action_favorites:
+                                getSupportActionBar().hide();
+                                FragmentManager fm = getSupportFragmentManager();
+                                Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+                                if (fragment == null) {
+                                    fragment = new FavoritesFragment();
+                                    ;
+                                    fm.beginTransaction()
+                                            .add(R.id.fragmentContainer, fragment)
+                                            .commit();
+                                }
                                 break;
                             case R.id.action_profile:
                                 break;
