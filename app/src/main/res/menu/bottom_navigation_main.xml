@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:enabled="true"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        app:showAsAction="always|withText" />
+
     <item
         android:id="@+id/action_favorites"
         android:enabled="true"
         android:icon="@drawable/ic_favorite_white_24dp"
         android:title="Favorites"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always|withText" />
+
     <item
-        android:id="@+id/action_schedules"
+        android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_access_time_white_24dp"
-        android:title="Schedules"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/profile_icon"
+        android:title="Profile"
+        app:showAsAction="always|withText"/>
+
     <item
-        android:id="@+id/action_music"
+        android:id="@+id/action_workout"
         android:enabled="true"
-        android:icon="@drawable/ic_audiotrack_white_24dp"
-        android:title="Music"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/workout_icon"
+        android:title="Workout"
+        app:showAsAction="always|withText"/>
 </menu>

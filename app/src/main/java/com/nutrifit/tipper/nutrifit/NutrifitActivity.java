@@ -54,16 +54,21 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
+
+        BottomNavigationHelper.disableShiftMode(bottomNavigationView);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
+                            case R.id.action_search:
+                                break;
                             case R.id.action_favorites:
                                 break;
-                            case R.id.action_schedules:
+                            case R.id.action_profile:
                                 break;
-                            case R.id.action_music:
+                            case R.id.action_workout:
                                 break;
                         }
                         return false;
