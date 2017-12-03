@@ -273,7 +273,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void deleteRecipe(Recipe recipe) {
-        String deleteQuery = "DELETE FROM " + TABLE_RECIPE + " WHERE " + "(" + KEY_RECIPE_ID + "=" + recipe.getRecipeID() + " AND " + KEY_RECIPE_USER_ID + "=" + recipe.getUserID() + ")";
+        String deleteQuery = "DELETE FROM " + TABLE_RECIPE + " WHERE " + KEY_RECIPE_ID + "= '" + recipe.getRecipeID() + "'" + " AND " + KEY_RECIPE_USER_ID + "= '" + recipe.getUserID() + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(deleteQuery);
         db.close();

@@ -85,11 +85,48 @@ public class FavoritesFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
             holder.titleTextView.setText(list.get(position).getRecipeName());
             Picasso.with(getActivity()).load(list.get(position).getImageUrl()).into(holder.coverImageView);
-            holder.likeImageView.setTag(R.drawable.ic_like);
+            holder.likeImageView.setTag(R.drawable.ic_liked);
+
+            holder.likeImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    int id = (int)holder.likeImageView.getTag();
+                    if( id == R.drawable.ic_liked){
+
+                        holder.likeImageView.setTag(R.drawable.ic_like);
+                        holder.likeImageView.setImageResource(R.drawable.ic_like);
+                        db.deleteRecipe(list.get(position));
+                        Toast.makeText(getActivity(),holder.titleTextView.getText()+" removed from favorites",Toast.LENGTH_SHORT).show();
+
+                    } else{
+
+                        holder.likeImageView.setTag(R.drawable.ic_liked);
+                        holder.likeImageView.setImageResource(R.drawable.ic_liked);
+                        db.addRecipe(list.get(position));
+                        Toast.makeText(getActivity(),holder.titleTextView.getText()+" added to favorites",Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                }
+            });
+
+
+            holder.infoImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                }
+            });
+
+
 
         }
 
@@ -112,56 +149,9 @@ public class FavoritesFragment extends Fragment {
             coverImageView = (ImageView) v.findViewById(R.id.coverImageView);
             likeImageView = (ImageView) v.findViewById(R.id.likeImageView);
             infoImageView = (ImageView) v.findViewById(R.id.infoImageView);
-            likeImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    int id = (int)likeImageView.getTag();
-                        if( id == R.drawable.ic_like){
-
-                            likeImageView.setTag(R.drawable.ic_liked);
-                            likeImageView.setImageResource(R.drawable.ic_liked);
-
-                            Toast.makeText(getActivity(),titleTextView.getText()+" added to favorites",Toast.LENGTH_SHORT).show();
-
-                        }else{
-
-                            likeImageView.setTag(R.drawable.ic_like);
-                            likeImageView.setImageResource(R.drawable.ic_like);
-                            Toast.makeText(getActivity(),titleTextView.getText()+" removed from favorites",Toast.LENGTH_SHORT).show();
-
-
-                        }
-
-                }
-            });
-
-
-
-            infoImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-
-
-                }
-            });
-
-
-
         }
     }
 
-    private boolean isLastItemDisplaying(RecyclerView recyclerView) {
-        if (recyclerView.getAdapter().getItemCount() != 0) {
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
-                return true;
-        }
-        return false;
-    }
 
     private User getUserData()
     {
@@ -176,6 +166,6 @@ public class FavoritesFragment extends Fragment {
     public void initializeList() {
         listitems.clear();
         listitems = db.getAllRecipes(user.getId());
-        db.close();
+
     }
 }
