@@ -15,8 +15,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +29,8 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".FitnessGoalsActivity"></activity>
+        <activity android:name=".FitnessGoalsActivity" />
+        <activity android:name=".RecipeDetailsActivity"></activity>
     </application>
 
 </manifest>

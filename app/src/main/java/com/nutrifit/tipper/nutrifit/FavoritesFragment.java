@@ -31,6 +31,7 @@ public class FavoritesFragment extends Fragment {
     RecyclerView MyRecyclerView;
     private DatabaseHandler db;
     public static final String USER = "USER";
+    public static final String RECIPE = "RECIPE";
     private User user;
 
     @Override
@@ -118,7 +119,9 @@ public class FavoritesFragment extends Fragment {
             holder.infoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    saveRecipeData(getActivity(), list.get(position));
+                    Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+                    getActivity().startActivity(i);
 
                 }
             });
@@ -147,6 +150,20 @@ public class FavoritesFragment extends Fragment {
             likeImageView = (ImageView) v.findViewById(R.id.likeImageView);
             infoImageView = (ImageView) v.findViewById(R.id.infoImageView);
         }
+    }
+
+    private void saveRecipeData(Context context, Recipe recipe)
+    {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(RECIPE, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String recipeObj = gson.toJson(recipe);
+
+        editor.putString(RECIPE, recipeObj);
+        editor.commit();
     }
 
 
