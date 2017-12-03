@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:background="@color/grey">
 
         <com.mindorks.placeholderview.SwipePlaceHolderView
@@ -36,14 +37,3 @@
         app:itemTextColor="@color/white"
         app:menu="@menu/bottom_navigation_main" />
 </android.support.constraint.ConstraintLayout>
-
-
-
-    <!--<?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".NutrifitActivity"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
-    </FrameLayout>-->

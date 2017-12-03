@@ -1,7 +1,9 @@
 package com.nutrifit.tipper.nutrifit;
 
         import android.content.ContentResolver;
+        import android.content.Context;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.net.Uri;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
@@ -15,20 +17,30 @@ package com.nutrifit.tipper.nutrifit;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
+
+        import com.google.gson.Gson;
+        import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
+        import com.nutrifit.tipper.nutrifit.Model.Recipe;
+        import com.nutrifit.tipper.nutrifit.Model.User;
+        import com.squareup.picasso.Picasso;
+
         import java.util.ArrayList;
 
 
 
 public class FavoritesFragment extends Fragment {
 
-    ArrayList<WonderModel> listitems = new ArrayList<>();
+    ArrayList<Recipe> listitems = new ArrayList<Recipe>();
     RecyclerView MyRecyclerView;
-    String Wonders[] = {"Chichen Itza","Christ the Redeemer","Great Wall of China","Machu Picchu","Petra","Taj Mahal","Colosseum"};
-    int  Images[] = {R.drawable.chichen_itza,R.drawable.christ_the_redeemer,R.drawable.great_wall_of_china,R.drawable.machu_picchu,R.drawable.petra,R.drawable.taj_mahal,R.drawable.colosseum};
+    private DatabaseHandler db;
+    public static final String USER = "USER";
+    private User user;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = new DatabaseHandler(getActivity());
+        user = getUserData();
         initializeList();
         getActivity().setTitle("Search for Healthy Recipes");
     }
@@ -57,9 +69,9 @@ public class FavoritesFragment extends Fragment {
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-        private ArrayList<WonderModel> list;
+        private ArrayList<Recipe> list;
 
-        public MyAdapter(ArrayList<WonderModel> Data) {
+        public MyAdapter(ArrayList<Recipe> Data) {
             list = Data;
         }
 
@@ -75,9 +87,8 @@ public class FavoritesFragment extends Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-            holder.titleTextView.setText(list.get(position).getCardName());
-            holder.coverImageView.setImageResource(list.get(position).getImageResourceId());
-            holder.coverImageView.setTag(list.get(position).getImageResourceId());
+            holder.titleTextView.setText(list.get(position).getRecipeName());
+            Picasso.with(getActivity()).load(list.get(position).getImageUrl()).into(holder.coverImageView);
             holder.likeImageView.setTag(R.drawable.ic_like);
 
         }
@@ -93,14 +104,14 @@ public class FavoritesFragment extends Fragment {
         public TextView titleTextView;
         public ImageView coverImageView;
         public ImageView likeImageView;
-        public ImageView shareImageView;
+        public ImageView infoImageView;
 
         public MyViewHolder(View v) {
             super(v);
             titleTextView = (TextView) v.findViewById(R.id.titleTextView);
             coverImageView = (ImageView) v.findViewById(R.id.coverImageView);
             likeImageView = (ImageView) v.findViewById(R.id.likeImageView);
-            shareImageView = (ImageView) v.findViewById(R.id.shareImageView);
+            infoImageView = (ImageView) v.findViewById(R.id.infoImageView);
             likeImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,13 +123,13 @@ public class FavoritesFragment extends Fragment {
                             likeImageView.setTag(R.drawable.ic_liked);
                             likeImageView.setImageResource(R.drawable.ic_liked);
 
-                            Toast.makeText(getActivity(),titleTextView.getText()+" added to favourites",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),titleTextView.getText()+" added to favorites",Toast.LENGTH_SHORT).show();
 
                         }else{
 
                             likeImageView.setTag(R.drawable.ic_like);
                             likeImageView.setImageResource(R.drawable.ic_like);
-                            Toast.makeText(getActivity(),titleTextView.getText()+" removed from favourites",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),titleTextView.getText()+" removed from favorites",Toast.LENGTH_SHORT).show();
 
 
                         }
@@ -128,21 +139,10 @@ public class FavoritesFragment extends Fragment {
 
 
 
-            shareImageView.setOnClickListener(new View.OnClickListener() {
+            infoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-
-                    Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                            "://" + getResources().getResourcePackageName(coverImageView.getId())
-                            + '/' + "drawable" + '/' + getResources().getResourceEntryName((int)coverImageView.getTag()));
-
-
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM,imageUri);
-                    shareIntent.setType("image/jpeg");
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 
 
 
@@ -154,23 +154,28 @@ public class FavoritesFragment extends Fragment {
         }
     }
 
+    private boolean isLastItemDisplaying(RecyclerView recyclerView) {
+        if (recyclerView.getAdapter().getItemCount() != 0) {
+            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
+                return true;
+        }
+        return false;
+    }
+
+    private User getUserData()
+    {
+        SharedPreferences settings;
+        settings = getActivity().getSharedPreferences(USER, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(USER, null);
+        User retUser = gson.fromJson(userObj, User.class);
+        return retUser;
+    }
+
     public void initializeList() {
         listitems.clear();
-
-        for(int i =0;i<7;i++){
-
-
-            WonderModel item = new WonderModel();
-            item.setCardName(Wonders[i]);
-            item.setImageResourceId(Images[i]);
-            item.setIsfav(0);
-            item.setIsturned(0);
-            listitems.add(item);
-
-        }
-
-
-
-
+        listitems = db.getAllRecipes(user.getId());
+        db.close();
     }
 }

@@ -137,7 +137,7 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast toast = Toast.makeText(NutrifitActivity.this, "Added " + query + "to your recipe search list", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(NutrifitActivity.this, "Added " + query + " to your recipe search list", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 Utils utils = new Utils(NutrifitActivity.this, query);
