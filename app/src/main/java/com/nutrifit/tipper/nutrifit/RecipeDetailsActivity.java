@@ -3,6 +3,7 @@ package com.nutrifit.tipper.nutrifit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.TextViewCompat;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,6 +60,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        user = getUserData();
+        recipe = getRecipeData();
+
         db = new DatabaseHandler(this);
 
         recipeImage = (ImageView) findViewById(R.id.recipeImage);
@@ -68,9 +73,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         sourceName = (EditText) findViewById(R.id.recipeSourceName);
         calories = (TextView) findViewById(R.id.recipeCalories);
         updateButton = (Button) findViewById(R.id.updateButton);
-
-        user = getUserData();
-        recipe = getRecipeData();
 
         initializeRecipeDetails();
 
@@ -92,19 +94,30 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     recipe.setTotalTimeInSeconds(convertHHMMToSeconds(recipeTime.getText().toString()));
                     recipe.setRating((int) rating.getRating());
                     int dbUpdate = db.updateRecipe(recipe);
+
                     if(dbUpdate == 1) {
+
+                        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(RecipeDetailsActivity.this);
+                        SharedPreferences.Editor editor = mySPrefs.edit();
+                        editor.remove(RECIPE);
+                        editor.apply();
+
                         saveRecipeData(RecipeDetailsActivity.this, recipe);
+
                         Toast toast = Toast.makeText(RecipeDetailsActivity.this, "Updated Recipe successfully", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-                        Intent i = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+
+                        Intent i = new Intent(RecipeDetailsActivity.this, NutrifitActivity.class);
                         startActivity(i);
                         finish();
+
                     } else {
                         Toast toast = Toast.makeText(RecipeDetailsActivity.this, "Updated Recipe unsuccessfully, please try again", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }
+
                     db.close();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -206,6 +219,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         } else {
             calories.setText("550");
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        onBackPressed();
+        return true;
     }
 
 }

@@ -86,7 +86,7 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                                 if (fragment == null) {
                                     fragment = new FavoritesFragment();
                                     fm.beginTransaction()
-                                            .add(R.id.fragmentContainer, fragment)
+                                            .replace(R.id.fragmentContainer, fragment)
                                             .commit();
                                 }
                                 break;
