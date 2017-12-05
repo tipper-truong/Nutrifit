@@ -86,7 +86,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (retUser.getEmail().equals(email) && retPassword.equals(password)) {
                             Intent i = new Intent(v.getContext(), NutrifitActivity.class);
                             startActivity(i);
-                            //finish();
+                            saveUserData(SignInActivity.this, db.getUser(email));
                             saveSignUpFirstTime(SignInActivity.this);
 
                         } else {
@@ -123,6 +123,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 if (dbUser != null && dbUser.getCaloriesToBurnPerDay() != 0 && dbUser.getFitnessGoals() != null) {
                     Log.v("User", "Session Passed");
+                    saveUserData(SignInActivity.this, dbUser);
                     Intent i = new Intent(SignInActivity.this, NutrifitActivity.class);
                     startActivity(i);
                     finish();
@@ -199,6 +200,11 @@ public class SignInActivity extends AppCompatActivity {
             String lastName = object.getString("last_name");
             String email = object.getString("email");
             String gender = object.getString("gender");
+
+            if(db.getUser(email) != null) {
+                Log.v("Login", "Facebook User");
+                saveUserData(SignInActivity.this, db.getUser(email));
+            }
 
             User user = new User(firstName, lastName, email, null, gender, null, 0);
             boolean userExist = db.addUser(user, SignInActivity.this);

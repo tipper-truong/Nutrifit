@@ -6,12 +6,20 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
+import com.nutrifit.tipper.nutrifit.Model.User;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -30,6 +38,13 @@ public class ProfileFragment extends Fragment {
     private Context pContext;
     private Button logOutButton;
     public static final String USER = "USER";
+    private User user;
+    private TextView name;
+    private TextView email;
+    private TextView gender;
+    private TextView goal;
+    private TextView calPerDay;
+    private TextView currCalIntake;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -74,6 +89,22 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         final View profileView = inflater.inflate(R.layout.fragment_profile, container, false);
         pContext = profileView.getContext();
+
+        user = getUserData();
+
+        name = (TextView) profileView.findViewById(R.id.profileName);
+        email = (TextView) profileView.findViewById(R.id.emailProfile);
+        gender = (TextView) profileView.findViewById(R.id.genderProfile);
+        goal = (TextView) profileView.findViewById(R.id.goalProfile);
+        calPerDay = (TextView) profileView.findViewById(R.id.caloriesPerDay);
+        currCalIntake = (TextView) profileView.findViewById(R.id.caloriesIntake);
+
+        name.setText(user.getFirstName() + " " + user.getLastName());
+        email.setText(user.getEmail());
+        gender.setText(user.getGender());
+        goal.setText(user.getFitnessGoals());
+        setProfileFitnessGoals(user.getGender(), user.getFitnessGoals());
+        currCalIntake.setText(String.valueOf(user.getCaloriesToBurnPerDay()));
 
         logOutButton = (Button) profileView.findViewById(R.id.logOutButton);
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -127,11 +158,41 @@ public class ProfileFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private void setProfileFitnessGoals(String gender, String selectedFitnessGoals)
+    {
+
+        if(gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Lose Weight")) {
+            calPerDay.setText("1500");
+        } else if (gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Gain Weight")) {
+            calPerDay.setText("2000");
+        } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Lose Weight")) {
+            calPerDay.setText("2000");
+        } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Gain Weight")) {
+            calPerDay.setText("2500");
+        }
+
+    }
+
+    private User getUserData()
+    {
+        SharedPreferences settings;
+        settings = getActivity().getSharedPreferences(USER, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(USER, null);
+        User retUser = gson.fromJson(userObj, User.class);
+        return retUser;
+    }
+
     private void clearSessionUser()
     {
         SharedPreferences preferences = getActivity().getSharedPreferences(USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.commit();
+        try {
+            editor.clear();
+            editor.commit();
+        } catch(NullPointerException e) {
+            // else it's a facebook login, don't clear session for user
+            e.printStackTrace();
+        }
     }
 }
