@@ -42,6 +42,8 @@ public class NutrifitActivity extends AppCompatActivity {
                                 selectedFragment = ProfileFragment.newInstance();
                                 break;
                             case R.id.action_workout:
+                                getSupportActionBar().hide();
+                                selectedFragment = WorkoutFragment.newInstance();
                                 break;
                         }
 

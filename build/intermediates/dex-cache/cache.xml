@@ -3,6 +3,24 @@
 
     <item
         is-multidex="true"
+        jar="/Users/tipper/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/25.4.0/f6a2fc748ae3769633dea050563e1613e93c135e/support-annotations-25.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="f6a2fc748ae3769633dea050563e1613e93c135e">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.4.0_c14160c83a6c0e56433dc521af2a607f3d5af227/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="0a3c68351d7b9b4d1f1c0e13f0775d861fff15ab">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_9b5513d64b99ebadbb58fbfb9ff80948469e5b1b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
@@ -12,12 +30,30 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="/Users/tipper/.android/build-cache/c634e6800ad868af8f407af5cec9f4d9e405b6ea/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="d089bfc59e39969fa8d28db89c376f157b42d684">
-        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_9b5513d64b99ebadbb58fbfb9ff80948469e5b1b/classes.dex" />
+        sha1="b1e0cd070d7cf659ece90e919bff76e7ddc32532">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_69b1b154eb3ff770619e327deeadba6128cfefaa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tipper/.android/build-cache/f6926c9f062937f93c75cc5e149d02e168d9009d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="a64026daf4819a589aea776f5deb19b257a104d1">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e6aaefb42acfa508e6a64e635cd2b01d06117894/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tipper/.android/build-cache/8ba98ee3da30a45511abbd56c45a78af7b410138/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="c2deeac83ffa1304264bc755c2ddb84e7a7fa239">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_be5d0d6d5e88e38a1cd59660ef6e0880d04d83cb/classes.dex" />
     </item>
 
 </items>
