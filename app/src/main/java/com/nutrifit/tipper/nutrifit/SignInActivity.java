@@ -86,6 +86,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (retUser.getEmail().equals(email) && retPassword.equals(password)) {
                             Intent i = new Intent(v.getContext(), NutrifitActivity.class);
                             startActivity(i);
+                            finish();
                             saveUserData(SignInActivity.this, db.getUser(email));
                             saveSignUpFirstTime(SignInActivity.this);
 
