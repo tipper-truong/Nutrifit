@@ -264,7 +264,7 @@
                             android:layout_height="match_parent"
                             android:text="Update"
                             android:id="@+id/updateButton"
-                            android:background="@color/light_blue"
+                            android:background="@android:color/holo_red_light"
                             android:textColor="@color/white"/>
 
                     </LinearLayout>
