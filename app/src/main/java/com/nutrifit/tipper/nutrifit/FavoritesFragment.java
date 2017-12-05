@@ -7,6 +7,8 @@ package com.nutrifit.tipper.nutrifit;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.support.v4.app.Fragment;
+        import android.support.v4.app.FragmentTransaction;
+        import android.support.v7.app.AppCompatActivity;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.support.v7.widget.Toolbar;
@@ -42,6 +44,12 @@ public class FavoritesFragment extends Fragment {
         user = getUserData();
         initializeList();
         getActivity().setTitle("Search for Healthy Recipes");
+    }
+
+    public static FavoritesFragment newInstance()
+    {
+        FavoritesFragment fFragment = new FavoritesFragment();
+        return fFragment;
     }
 
     @Override
@@ -121,8 +129,12 @@ public class FavoritesFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     saveRecipeData(getActivity(), list.get(position));
-                    Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
-                    getActivity().startActivity(i);
+                    Fragment selectedFragment = RecipeDetailsFragment.newInstance();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, selectedFragment);
+                    transaction.commit();
+                    /*Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
+                    getActivity().startActivity(i);*/
 
                 }
             });

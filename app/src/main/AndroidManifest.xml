@@ -30,7 +30,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".FitnessGoalsActivity" />
-        <activity android:name=".RecipeDetailsActivity" />
     </application>
 
 </manifest>

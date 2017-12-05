@@ -1,0 +1,276 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nutrifit.tipper.nutrifit.RecipeDetailsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:id="@+id/ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none" >
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/activity_details_rl_layout"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:id="@+id/recipeImage"/>
+
+
+                <TableLayout
+                    android:id="@+id/recipeDetailsTableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/recipeImage">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+
+                    <!-- Recipe Name -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Recipe Name:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/recipeName"
+                            android:text="Recipe Name"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Name -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <!-- Recipe Rating -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Rating:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+
+                        <RatingBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?android:attr/ratingBarStyleIndicator"
+                            android:scaleX=".8"
+                            android:scaleY=".8"
+                            android:numStars="5"
+                            android:isIndicator="false"
+                            android:stepSize="1.0"
+                            android:id="@+id/recipeRating"
+                            android:rating="5.0"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Rating -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <!-- Recipe Time -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Time:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/recipeTime"
+                            android:text="00:00"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Time -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <!-- Recipe Ingredients -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Ingredients:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/recipeIngredients"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Ingredients -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <!-- Recipe Source Name -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Source Name:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/recipeSourceName"
+                            android:text="Source Name"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Source Name -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <!-- Recipe Calories -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="Calories:"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColor"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/recipeCalories"
+                            android:text="Calories"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"/>
+
+                    </TableRow>
+                    <!-- End of Recipe Source Name -->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/textColor"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Update"
+                            android:id="@+id/updateButton"
+                            android:background="@color/light_blue"
+                            android:textColor="@color/white"/>
+
+                    </LinearLayout>
+                </TableLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

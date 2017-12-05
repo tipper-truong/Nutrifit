@@ -14,11 +14,6 @@
         android:layout_marginBottom="?attr/actionBarSize"
         android:background="@color/grey">
 
-        <com.mindorks.placeholderview.SwipePlaceHolderView
-            android:id="@+id/swipeView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
 
     </FrameLayout>
 

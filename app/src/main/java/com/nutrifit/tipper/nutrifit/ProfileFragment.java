@@ -83,6 +83,12 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public static ProfileFragment newInstance()
+    {
+        ProfileFragment pFragment = new ProfileFragment();
+        return pFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
