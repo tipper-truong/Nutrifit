@@ -78,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_PASSWORD + " TEXT,"
                 + KEY_GENDER + " TEXT,"
                 + KEY_FITNESS_GOALS + " TEXT,"
-                + KEY_CALORIES_BURNED_PER_DAY + " INTEGER, "
+                + KEY_CALORIES_BURNED_PER_DAY + " FLOAT, "
                 + "UNIQUE (" + KEY_EMAIL + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
 
         String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPE + "("

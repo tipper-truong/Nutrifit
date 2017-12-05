@@ -13,9 +13,9 @@ public class User {
     private String password;
     private String gender;
     private String fitnessGoals;
-    private int caloriesToBurnPerDay;
+    private float caloriesToBurnPerDay;
 
-    public User(String firstName, String lastName, String email, String password, String gender, String fitnessGoals, int caloriesToBurnPerDay) {
+    public User(String firstName, String lastName, String email, String password, String gender, String fitnessGoals, float caloriesToBurnPerDay) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -81,7 +81,7 @@ public class User {
         this.fitnessGoals = fitnessGoals;
     }
 
-    public int getCaloriesToBurnPerDay() {
+    public float getCaloriesToBurnPerDay() {
         return caloriesToBurnPerDay;
     }
 
