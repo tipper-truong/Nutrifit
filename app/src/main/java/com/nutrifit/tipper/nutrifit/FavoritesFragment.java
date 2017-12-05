@@ -10,6 +10,7 @@ package com.nutrifit.tipper.nutrifit;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.support.v7.widget.Toolbar;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -179,7 +180,12 @@ public class FavoritesFragment extends Fragment {
 
     public void initializeList() {
         listitems.clear();
-        listitems = db.getAllRecipes(user.getId());
+        try {
+            listitems = db.getAllRecipes(user.getId());
+        } catch (NullPointerException e) {
+            Log.v("Error", "User hasn't added favorite recipes yet");
+            e.printStackTrace();
+        }
 
     }
 }

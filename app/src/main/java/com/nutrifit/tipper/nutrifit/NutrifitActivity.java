@@ -71,6 +71,9 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
                         switch (item.getItemId()) {
                             case R.id.action_search:
                                 getSupportActionBar().show();
@@ -80,8 +83,6 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                             case R.id.action_favorites:
                                 getSupportActionBar().hide();
                                 mSwipeView.removeAllViews();
-                                FragmentManager fm = getSupportFragmentManager();
-                                Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
                                 if (fragment == null) {
                                     fragment = new FavoritesFragment();
@@ -91,6 +92,12 @@ public class NutrifitActivity extends AppCompatActivity implements SensorEventLi
                                 }
                                 break;
                             case R.id.action_profile:
+                                if (fragment == null) {
+                                    fragment = new ProfileFragment();
+                                    fm.beginTransaction()
+                                            .replace(R.id.fragmentContainer, fragment)
+                                            .commit();
+                                }
                                 break;
                             case R.id.action_workout:
                                 break;

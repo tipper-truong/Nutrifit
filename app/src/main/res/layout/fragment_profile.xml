@@ -1,0 +1,259 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nutrifit.tipper.nutrifit.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/llayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/profileImage"
+                android:src="@drawable/profile" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/llayout2"
+            android:layout_below="@id/llayout1"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="@color/textColor"
+                android:textStyle="bold"
+                android:text="Tipper Truong"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/llayout3"
+            android:layout_below="@id/llayout2"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:id="@+id/emailProfile"
+                android:textColor="@color/textColor"
+                android:textStyle="italic"
+                android:text="tqtruong95@yahoo.com"/>
+
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/llayout3">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor"/>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="Gender"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/textColor" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/genderProfile"
+                    android:text="Female"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"/>
+
+            </TableRow>
+            <!-- End of Gender -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor"/>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="Goal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/textColor" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profileLoseWeight"
+                    android:text="Lose Weight"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"/>
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor"/>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="Calories Per Day"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/textColor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/caloriesPerDay"
+                    android:text="1500"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"/>
+
+            </TableRow>
+            <!-- End of Recipe Time -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor"/>
+
+            <!-- Recipe Ingredients -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="Calories Burned"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/textColor" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="1500"
+                    android:id="@+id/caloriesBurned"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"/>
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Log Out"
+                    android:id="@+id/logOutButton"
+                    android:background="@color/light_blue"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+        </TableLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
