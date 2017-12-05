@@ -1,42 +1,13 @@
 package com.nutrifit.tipper.nutrifit;
 
-
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.mindorks.placeholderview.SwipeDecor;
-import com.mindorks.placeholderview.SwipePlaceHolderView;
-import com.nutrifit.tipper.nutrifit.Model.Recipe;
-import com.nutrifit.tipper.nutrifit.Model.User;
-
-import java.util.*;
 
 public class NutrifitActivity extends AppCompatActivity {
 
@@ -63,7 +34,6 @@ public class NutrifitActivity extends AppCompatActivity {
                                 break;
                             case R.id.action_favorites:
                                 getSupportActionBar().hide();
-                                //mSwipeView.removeAllViews();
                                 selectedFragment = new FavoritesFragment();
 
                                 break;
@@ -74,6 +44,7 @@ public class NutrifitActivity extends AppCompatActivity {
                             case R.id.action_workout:
                                 break;
                         }
+
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragmentContainer, selectedFragment);
                         transaction.commit();
