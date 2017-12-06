@@ -3,24 +3,6 @@
 
     <item
         is-multidex="true"
-        jar="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.1"
-        sha1="d4e2eee6e1ef7b031d82af4c435d943a9e9b321b">
-        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_9b5513d64b99ebadbb58fbfb9ff80948469e5b1b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/tipper/.android/build-cache/d5903b50785a89ca34c1c1bdba57a34b195fdbc0/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.1"
-        sha1="b12cd9c87c3dfb012a911b6e38d2444ed0a65e1f">
-        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_43bc6c7b01c8e577cf6d2ab594b6c6ab8a608f70/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/tipper/.android/build-cache/5688d3855eb8816e535124343d8a9a888785df0e/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
@@ -45,6 +27,24 @@
         revision="26.0.1"
         sha1="58b12bdb21a84f22e0dc3b047aeceb0a546b1b44">
         <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_54cff62f66578b30750a8a22834d4790c1a9b390/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6d560062072c26c7e176adb71b0fb43ad6263a50">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_9b5513d64b99ebadbb58fbfb9ff80948469e5b1b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tipper/.android/build-cache/d5903b50785a89ca34c1c1bdba57a34b195fdbc0/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="b12cd9c87c3dfb012a911b6e38d2444ed0a65e1f">
+        <dex dex="/Users/tipper/Desktop/Nutrifit/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_43bc6c7b01c8e577cf6d2ab594b6c6ab8a608f70/classes.dex" />
     </item>
 
 </items>

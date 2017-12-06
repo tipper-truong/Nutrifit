@@ -120,6 +120,7 @@ public class ProfileFragment extends Fragment {
                 LoginManager.getInstance().logOut(); // log out facebook
                 Intent i = new Intent(getActivity(), SignInActivity.class);
                 getActivity().startActivity(i);
+                getActivity().finish();
             }
         });
         return profileView;
@@ -174,11 +175,6 @@ public class ProfileFragment extends Fragment {
         exerciseCaloriesBurned.setText(String.format("%.2f", user.getExerciseCalories()));
         setProfileFitnessGoals(user.getGender(), user.getFitnessGoals());
         currCalIntake.setText(String.format("%.2f", user.getCaloriesToBurnPerDay()));
-        if(Float.valueOf(currCalIntake.getText().toString()) > 1500) {
-            currCalIntake.setTextColor(Color.RED);
-        } else {
-            currCalIntake.setTextColor(Color.parseColor("#228B22"));
-        }
     }
 
     private void setProfileFitnessGoals(String gender, String selectedFitnessGoals)

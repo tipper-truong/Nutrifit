@@ -189,7 +189,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         caloriesWkout = (TextView) record_workout_view.findViewById(R.id.caloriesWkout);
         mContext = record_workout_view.getContext();
         sManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         db = new DatabaseHandler(mContext);
         activityRunning = true;
         user = getUserData();
@@ -676,6 +676,12 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     {
         super.onDestroyView();
         Log.v("Fragment", "OnDestroyView");
+        activityRunning = false;
+        sManager.unregisterListener(this, stepSensor);
+        // Handler clears the message queue
+        stopTimerAndLocationTracking();
+        mHandler.removeCallbacks(updateLocationRunnable);
+        mHandler.removeCallbacks(updateTimerRunnable);
     }
 
     @Override
@@ -729,7 +735,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
             }
 
 
-            if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            if (sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
                 steps++;
             }
         }
