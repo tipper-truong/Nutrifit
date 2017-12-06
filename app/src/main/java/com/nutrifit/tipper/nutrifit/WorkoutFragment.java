@@ -67,7 +67,10 @@ import com.google.gson.reflect.TypeToken;
 import com.nutrifit.tipper.nutrifit.Database.DatabaseHandler;
 import com.nutrifit.tipper.nutrifit.Model.User;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,6 +100,8 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     private String mParam2;
     private View record_workout_view;
     private TextView duration;
+    private TextView caloriesWkout;
+    private TextView currPace;
     private WatchTime watchTime; // singleton
     private Bundle saveInstanceState;
     private Handler mHandler;
@@ -117,6 +122,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     private int hour;
     private int minutes;
     private int seconds;
+    private static WorkoutFragment wFragment = new WorkoutFragment();
 
     public static final String PREFS_NAME = "USER" ;
 
@@ -166,7 +172,6 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
 
     public static WorkoutFragment newInstance()
     {
-        WorkoutFragment wFragment = new WorkoutFragment();
         return wFragment;
     }
 
@@ -179,6 +184,8 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         points = new ArrayList<LatLng>();
         startTime = false;
         distance = (TextView) record_workout_view.findViewById(R.id.distance);
+        currPace = (TextView) record_workout_view.findViewById(R.id.pace);
+        caloriesWkout = (TextView) record_workout_view.findViewById(R.id.caloriesWkout);
         mContext = record_workout_view.getContext();
         sManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -210,6 +217,8 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
                         points.clear(); // reset list of LatLng points
                         resetTimer(); // reset timer
                         distance.setText("0.00");
+                        currPace.setText("00:00");
+                        caloriesWkout.setText("0");
                         startTime = true; // time has started
                         startTimerAndLocationTracking();
                     } else {
@@ -366,12 +375,38 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
                         points.add(latLng);
 
                         // Draws the Polyline when the user moves location
-                        drawPolyline();
+                        if(startTime) {
+                            drawPolyline();
 
-                        dist += getDistance(steps);
-                        Log.v("Distance", String.valueOf(dist));
-                        float calories = calculateCalories(steps);
+                            dist += getDistance(steps);
+                            Log.v("Distance", String.valueOf(dist));
+                            distance.setText(String.format("%.2f", dist));
+                            float calories = calculateCalories(steps);
+                            caloriesWkout.setText(String.valueOf(calories));
+                            // Current Pace Formula: https://www.livestrong.com/article/291604-treadmills-calculate-pace-times/
+                            int seconds = 0;
+                            double curSecondPerMile = 0;
+                            double curPace = 0;
+                            double curPaceMinute = 0;
+                            double curPaceSecond = 0;
+                            try {
+                                seconds = convertHHMMToSeconds(duration.getText().toString());
+                                curSecondPerMile = seconds / dist; // seconds per mile
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
 
+                            curPace = curSecondPerMile / 60;
+                            curPaceMinute = Math.floor(curPace);
+                            curPaceSecond = (curPace % 1) * 60; // Example: .75 * 60 = 45 second
+                            if(dist != 0.0 && dist > 0.01) { // avoid funky numbers on mm side of the duration
+                                if (curPaceSecond >= 10 && curPaceSecond <= 99) { // Double Digit
+                                    currPace.setText(String.valueOf((int) curPaceMinute) + ":" + String.valueOf((int) curPaceSecond));
+                                } else { // Single Digit
+                                    currPace.setText(String.valueOf((int) curPaceMinute) + ":" + "0" + String.valueOf((int) curPaceSecond));
+                                }
+                            }
+                        }
 
                     }
 
@@ -581,6 +616,20 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
 
         googleMap.addPolyline(options); //add Polyline
     }
+
+    private int convertHHMMToSeconds(String time) throws ParseException {
+        DateFormat dateFormat;
+        if (time.length() == 5) {
+            dateFormat = new SimpleDateFormat("mm:ss");
+        } else {
+            dateFormat = new SimpleDateFormat("HH:mm:ss");
+        }
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = dateFormat.parse(time);
+        long seconds = date.getTime() / 1000L;
+        return (int) seconds;
+    }
+
 
     @Override
     public void onResume(){

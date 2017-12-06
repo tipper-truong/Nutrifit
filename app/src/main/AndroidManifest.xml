@@ -23,21 +23,26 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBX8ZMfcUSEV9ti98EGnQPvFCGqsoj1wtY" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".NutrifitActivity">
+        <activity android:name=".SignInActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SignUpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NutrifitActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".FitnessGoalsActivity" />
+        <activity android:name=".FitnessGoalsActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

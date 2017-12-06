@@ -64,6 +64,7 @@ public class SearchFragment extends Fragment  implements SensorEventListener {
     public static final String USER = "USER";
     private static final float ERROR = (float) 7.0;
     private User user;
+    private static final SearchFragment searchFragment = new SearchFragment();
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,7 +92,6 @@ public class SearchFragment extends Fragment  implements SensorEventListener {
 
     public static SearchFragment newInstance()
     {
-        SearchFragment searchFragment = new SearchFragment();
         return searchFragment;
     }
 
