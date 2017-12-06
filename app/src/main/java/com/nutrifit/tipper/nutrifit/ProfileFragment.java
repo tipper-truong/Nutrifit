@@ -3,6 +3,7 @@ package com.nutrifit.tipper.nutrifit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -169,10 +170,15 @@ public class ProfileFragment extends Fragment {
         email.setText(user.getEmail());
         gender.setText(user.getGender());
         goal.setText(user.getFitnessGoals());
-        foodCalories.setText(String.valueOf(user.getFoodCalories()));
-        exerciseCaloriesBurned.setText(String.valueOf(user.getExerciseCalories()));
+        foodCalories.setText(String.format("%.2f", user.getFoodCalories()));
+        exerciseCaloriesBurned.setText(String.format("%.2f", user.getExerciseCalories()));
         setProfileFitnessGoals(user.getGender(), user.getFitnessGoals());
-        currCalIntake.setText(String.valueOf(user.getCaloriesToBurnPerDay()));
+        currCalIntake.setText(String.format("%.2f", user.getCaloriesToBurnPerDay()));
+        if(Float.valueOf(currCalIntake.getText().toString()) > 1500) {
+            currCalIntake.setTextColor(Color.RED);
+        } else {
+            currCalIntake.setTextColor(Color.parseColor("#228B22"));
+        }
     }
 
     private void setProfileFitnessGoals(String gender, String selectedFitnessGoals)

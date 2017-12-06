@@ -1,12 +1,14 @@
 package com.nutrifit.tipper.nutrifit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
+import com.google.gson.Gson;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Click;
 import com.mindorks.placeholderview.annotations.Layout;
@@ -48,8 +50,9 @@ public class TinderCard {
     private SwipePlaceHolderView mSwipeView;
     private DatabaseHandler db;
     private User user;
+    public static final String USER = "USER";
 
-    public TinderCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView) {
+    public TinderCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView, User user) {
         db = new DatabaseHandler(context);
         mContext = context;
         mRecipe = recipe;
@@ -102,6 +105,25 @@ public class TinderCard {
     @SwipeIn
     private void onSwipeIn(){
         Log.d("EVENT", "onSwipedIn");
+
+        User dbUser = db.getUser(user.getEmail());
+        float remaining = 0; // Goal - Food + Exercise = Remaining
+        float foodCal = dbUser.getFoodCalories();
+        float recipeSwipedCalories = getRecipeCalories(mRecipe);
+        if(foodCal == 0) {
+            user.setFoodCalories(recipeSwipedCalories);
+            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getFoodCalories();
+            user.setCaloriesToBurnPerDay(remaining);
+            db.updateUser(user);
+            saveUserData(mContext, user);
+        } else {
+            foodCal += recipeSwipedCalories;
+            user.setFoodCalories(foodCal);
+            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getFoodCalories();
+            user.setCaloriesToBurnPerDay(remaining);
+            db.updateUser(user);
+            saveUserData(mContext, user);
+        }
         db.addRecipe(mRecipe);
     }
 
@@ -113,5 +135,35 @@ public class TinderCard {
     @SwipeOutState
     private void onSwipeOutState(){
         Log.d("EVENT", "onSwipeOutState");
+    }
+
+    private float getRecipeCalories(Recipe recipe)
+    {
+        float calories;
+        if(recipe.getIngredients().size() > 0 && recipe.getIngredients().size() <= 3) {
+            calories = 150;
+        } else if (recipe.getIngredients().size() > 3 && recipe.getIngredients().size() <= 6) {
+            calories = 250;
+        } else if(recipe.getIngredients().size() > 6 && recipe.getIngredients().size() <= 9) {
+            calories = 350;
+        } else if(recipe.getIngredients().size() > 9 && recipe.getIngredients().size() <= 12) {
+            calories = 450;
+        } else {
+            calories = 550;
+        }
+        return calories;
+    }
+
+    private void saveUserData(Context context, User user) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String userObj = gson.toJson(user);
+
+        editor.putString(USER, userObj);
+        editor.commit();
     }
 }

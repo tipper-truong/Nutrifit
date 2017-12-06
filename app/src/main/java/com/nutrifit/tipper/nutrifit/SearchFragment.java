@@ -188,7 +188,7 @@ public class SearchFragment extends Fragment  implements SensorEventListener {
                     public void onSuccess(ArrayList<Recipe> recipeList) {
                         for(Recipe recipe : recipeList) {
                             recipe.setUserID(user.getId());
-                            mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView));
+                            mSwipeView.addView(new TinderCard(mContext, recipe, mSwipeView, user));
                         }
                     }
 

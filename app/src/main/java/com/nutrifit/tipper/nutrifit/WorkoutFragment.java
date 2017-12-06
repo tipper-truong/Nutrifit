@@ -123,6 +123,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     private int minutes;
     private int seconds;
     private static WorkoutFragment wFragment = new WorkoutFragment();
+    private boolean activityRunning;
 
     public static final String PREFS_NAME = "USER" ;
 
@@ -190,7 +191,8 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         sManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         db = new DatabaseHandler(mContext);
-
+        activityRunning = true;
+        user = getUserData();
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
              /* Displaying Google Maps on Fragment UI */
@@ -226,6 +228,24 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
                         stopTimerAndLocationTracking();
                         steps = 0;
                         startTime = false; // time has stopped
+
+                        User dbUser = db.getUser(user.getEmail());
+                        float remaining = 0; // Goal - Food + Exercise = Remaining
+                        float exerciseCal = dbUser.getExerciseCalories();
+                        if(exerciseCal == 0) {
+                            user.setExerciseCalories(Float.valueOf(caloriesWkout.getText().toString()));
+                            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
+                            user.setCaloriesToBurnPerDay(remaining);
+                            db.updateUser(user);
+                            saveUserData(getActivity(), user);
+                        } else {
+                            exerciseCal += Float.valueOf(caloriesWkout.getText().toString());
+                            user.setExerciseCalories(exerciseCal);
+                            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
+                            user.setCaloriesToBurnPerDay(remaining);
+                            db.updateUser(user);
+                            saveUserData(getActivity(), user);
+                        }
                     }
                 }
             });
@@ -251,7 +271,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
 
         // Set the start time and call the custom handler
         watchTime.setStartTime(SystemClock.uptimeMillis());
-        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
         mHandler.postDelayed(updateLocationRunnable, 20);
         mHandler.postDelayed(updateTimerRunnable, 20);
     }
@@ -378,7 +398,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
                         if(startTime) {
                             drawPolyline();
 
-                            dist += getDistance(steps);
+                            dist = getDistance(steps);
                             Log.v("Distance", String.valueOf(dist));
                             distance.setText(String.format("%.2f", dist));
                             float calories = calculateCalories(steps);
@@ -433,6 +453,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
 
     //function to determine the distance run in kilometers using average step length for men and number of steps
     public float getDistance(int steps){
+        Log.v("Steps", String.valueOf(steps));
         float distance = (float)(steps*78)/(float)100000;
         return kmToMi(distance);
     }
@@ -634,8 +655,20 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     @Override
     public void onResume(){
         super.onResume();
-
+        activityRunning = true;
         Log.v("Fragment", "OnResume");
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        Log.v("Fragment", "OnDestroy");
+        activityRunning = false;
+        sManager.unregisterListener(this, stepSensor);
+        // Handler clears the message queue
+        mHandler.removeCallbacks(updateLocationRunnable);
+        mHandler.removeCallbacks(updateTimerRunnable);
     }
 
     @Override
@@ -686,17 +719,19 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Sensor sensor = event.sensor;
-        float[] values = event.values;
-        int value = -1;
+        if(activityRunning) {
+            Sensor sensor = event.sensor;
+            float[] values = event.values;
+            int value = -1;
 
-        if (values.length > 0) {
-            value = (int) values[0];
-        }
+            if (values.length > 0) {
+                value = (int) values[0];
+            }
 
 
-        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            steps++;
+            if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+                steps++;
+            }
         }
     }
 
@@ -704,6 +739,29 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
     public void onAccuracyChanged(Sensor sensor, int i)
     {
 
+    }
+
+    private void saveUserData(Context context, User user) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String userObj = gson.toJson(user);
+
+        editor.putString(PREFS_NAME, userObj);
+        editor.commit();
+    }
+
+    private User getUserData()
+    {
+        SharedPreferences settings;
+        settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(PREFS_NAME, null);
+        User retUser = gson.fromJson(userObj, User.class);
+        return retUser;
     }
 
 

@@ -104,17 +104,33 @@ public class FavoritesFragment extends Fragment {
 
 
                     int id = (int)holder.likeImageView.getTag();
+                    User dbUser = db.getUser(user.getEmail());
+                    float updateFoodCal = 0;
+                    float selectedRecipeCal = 0;
+                    float remaining = 0;
                     if( id == R.drawable.ic_liked){
-
+                        selectedRecipeCal = getRecipeCalories(list.get(position));
                         holder.likeImageView.setTag(R.drawable.ic_like);
                         holder.likeImageView.setImageResource(R.drawable.ic_like);
+                        updateFoodCal = dbUser.getFoodCalories() - selectedRecipeCal;
+                        user.setFoodCalories(updateFoodCal);
+                        remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getFoodCalories();
+                        user.setCaloriesToBurnPerDay(remaining);
+                        saveUserData(getActivity(), user);
+                        db.updateUser(user);
                         db.deleteRecipe(list.get(position));
                         Toast.makeText(getActivity(),holder.titleTextView.getText()+" removed from favorites",Toast.LENGTH_SHORT).show();
 
                     } else{
-
+                        selectedRecipeCal = getRecipeCalories(list.get(position));
                         holder.likeImageView.setTag(R.drawable.ic_liked);
                         holder.likeImageView.setImageResource(R.drawable.ic_liked);
+                        updateFoodCal = dbUser.getFoodCalories() + selectedRecipeCal;
+                        user.setFoodCalories(updateFoodCal);
+                        remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getFoodCalories();
+                        user.setCaloriesToBurnPerDay(remaining);
+                        saveUserData(getActivity(), user);
+                        db.updateUser(user);
                         db.addRecipe(list.get(position));
                         Toast.makeText(getActivity(),holder.titleTextView.getText()+" added to favorites",Toast.LENGTH_SHORT).show();
 
@@ -133,8 +149,7 @@ public class FavoritesFragment extends Fragment {
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragmentContainer, selectedFragment);
                     transaction.commit();
-                    /*Intent i = new Intent(getActivity(), RecipeDetailsActivity.class);
-                    getActivity().startActivity(i);*/
+
 
                 }
             });
@@ -179,6 +194,18 @@ public class FavoritesFragment extends Fragment {
         editor.commit();
     }
 
+    private void saveUserData(Context context, User user) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(USER, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String userObj = gson.toJson(user);
+
+        editor.putString(USER, userObj);
+        editor.commit();
+    }
 
     private User getUserData()
     {
@@ -188,6 +215,23 @@ public class FavoritesFragment extends Fragment {
         String userObj = settings.getString(USER, null);
         User retUser = gson.fromJson(userObj, User.class);
         return retUser;
+    }
+
+    private float getRecipeCalories(Recipe recipe)
+    {
+        float calories;
+        if(recipe.getIngredients().size() > 0 && recipe.getIngredients().size() <= 3) {
+            calories = 150;
+        } else if (recipe.getIngredients().size() > 3 && recipe.getIngredients().size() <= 6) {
+            calories = 250;
+        } else if(recipe.getIngredients().size() > 6 && recipe.getIngredients().size() <= 9) {
+            calories = 350;
+        } else if(recipe.getIngredients().size() > 9 && recipe.getIngredients().size() <= 12) {
+            calories = 450;
+        } else {
+            calories = 550;
+        }
+        return calories;
     }
 
     public void initializeList() {
