@@ -425,8 +425,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example if the user has previously denied the permission.
-            Log.i(TAG,
-                    "Displaying fine location permission rationale to provide additional context.");
+            Log.i(TAG, "Displaying fine location permission rationale to provide additional context.");
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.title_location_permission)
                     .setMessage(R.string.text_location_permission)

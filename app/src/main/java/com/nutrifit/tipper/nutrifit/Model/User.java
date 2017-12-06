@@ -14,8 +14,10 @@ public class User {
     private String gender;
     private String fitnessGoals;
     private float caloriesToBurnPerDay;
+    private float foodCalories;
+    private float exerciseCalories;
 
-    public User(String firstName, String lastName, String email, String password, String gender, String fitnessGoals, float caloriesToBurnPerDay) {
+    public User(String firstName, String lastName, String email, String password, String gender, String fitnessGoals, float caloriesToBurnPerDay, float foodCalories, float exerciseCalories) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -23,6 +25,8 @@ public class User {
         this.gender = gender;
         this.fitnessGoals = fitnessGoals;
         this.caloriesToBurnPerDay = caloriesToBurnPerDay;
+        this.foodCalories = foodCalories;
+        this.exerciseCalories = exerciseCalories;
     }
 
     public int getId() {
@@ -31,6 +35,26 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setCaloriesToBurnPerDay(float caloriesToBurnPerDay) {
+        this.caloriesToBurnPerDay = caloriesToBurnPerDay;
+    }
+
+    public float getFoodCalories() {
+        return foodCalories;
+    }
+
+    public void setFoodCalories(float foodCalories) {
+        this.foodCalories = foodCalories;
+    }
+
+    public float getExerciseCalories() {
+        return exerciseCalories;
+    }
+
+    public void setExerciseCalories(float exerciseCalories) {
+        this.exerciseCalories = exerciseCalories;
     }
 
     public String getFirstName() {

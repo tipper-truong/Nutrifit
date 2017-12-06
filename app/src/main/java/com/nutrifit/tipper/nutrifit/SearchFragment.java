@@ -121,6 +121,7 @@ public class SearchFragment extends Fragment  implements SensorEventListener {
 
         int bottomMargin = Utils.dpToPx(160);
         Point windowSize = Utils.getDisplaySize(getActivity().getWindowManager());
+        // Code Citation for SwipeView: https://blog.mindorks.com/android-tinder-swipe-view-example-3eca9b0d4794
         mSwipeView.getBuilder()
                 .setDisplayViewCount(3)
                 .setIsUndoEnabled(true)

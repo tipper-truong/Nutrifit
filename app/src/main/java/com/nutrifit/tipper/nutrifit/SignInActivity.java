@@ -207,7 +207,7 @@ public class SignInActivity extends AppCompatActivity {
                 saveUserData(SignInActivity.this, db.getUser(email));
             }
 
-            User user = new User(firstName, lastName, email, null, gender, null, 0);
+            User user = new User(firstName, lastName, email, null, gender, null, 0, 0, 0);
             boolean userExist = db.addUser(user, SignInActivity.this);
             if(!userExist) {
                 saveUserData(getApplicationContext(), user);

@@ -60,15 +60,35 @@
                 android:layout_height="wrap_content"
                 android:text="email@yahoo.com"
                 android:textColor="@color/textColor"
-                android:textSize="18sp"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llayout3"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Goal - Food + Exercise = Remaining"
+                android:textColor="@color/textColor"
+                android:textSize="15sp"
                 android:textStyle="italic" />
 
         </LinearLayout>
 
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/llayout3"
+            android:layout_below="@id/llayout4"
             android:layout_marginTop="10dp">
 
             <View
@@ -189,14 +209,12 @@
                     android:textSize="20sp" />
 
             </TableRow>
-            <!-- End of Recipe Time -->
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/textColor" />
 
-            <!-- Recipe Ingredients -->
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,10 +226,96 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="center_horizontal"
-                    android:text="Current Calorie Intake"
+                    android:text="Food"
                     android:textColor="@color/textColor"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:background="@color/textColor" />
+
+
+                <TextView
+                    android:id="@+id/foodCalories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:text="528"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:text="Exercise"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:background="@color/textColor" />
+
+
+                <TextView
+                    android:id="@+id/exerciseCaloriesBurn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:text="200"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center_horizontal"
+                    android:text="Remaining"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
 
                 <View
                     android:layout_width="1dp"
@@ -232,10 +336,7 @@
 
             </TableRow>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/textColor" />
+
 
 
             <LinearLayout

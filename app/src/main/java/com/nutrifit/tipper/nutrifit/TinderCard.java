@@ -26,6 +26,7 @@ import com.nutrifit.tipper.nutrifit.Model.User;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+// Code Citation for SwipeView: https://blog.mindorks.com/android-tinder-swipe-view-example-3eca9b0d4794
 
 @Layout(R.layout.tinder_card_view)
 public class TinderCard {

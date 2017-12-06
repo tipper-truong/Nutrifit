@@ -75,22 +75,22 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 1500", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
-                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 1500);
+                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 1500, 0, 0);
                     } else if (gender.equalsIgnoreCase("female") && selectedFitnessGoals.equals("Gain Weight")) {
                         Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
-                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000);
+                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000, 0, 0);
                     } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Lose Weight")) {
                         Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2000", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
-                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000);
+                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2000, 0, 0);
                     } else if (gender.equalsIgnoreCase("male") && selectedFitnessGoals.equals("Gain Weight")) {
                         Toast toast = Toast.makeText(SignUpActivity.this, "Calories Intake Per Day: 2500", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
-                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2500);
+                        user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString(), gender, selectedFitnessGoals, 2500, 0, 0);
                     }
                     saveUserData(getApplicationContext(), user);
                     boolean userExist = db.addUser(user, SignUpActivity.this);

@@ -43,6 +43,8 @@ public class ProfileFragment extends Fragment {
     private TextView email;
     private TextView gender;
     private TextView goal;
+    private TextView foodCalories;
+    private TextView exerciseCaloriesBurned;
     private TextView calPerDay;
     private TextView currCalIntake;
 
@@ -104,13 +106,10 @@ public class ProfileFragment extends Fragment {
         goal = (TextView) profileView.findViewById(R.id.goalProfile);
         calPerDay = (TextView) profileView.findViewById(R.id.caloriesPerDay);
         currCalIntake = (TextView) profileView.findViewById(R.id.caloriesIntake);
+        foodCalories = (TextView) profileView.findViewById(R.id.foodCalories);
+        exerciseCaloriesBurned = (TextView) profileView.findViewById(R.id.exerciseCaloriesBurn);
 
-        name.setText(user.getFirstName() + " " + user.getLastName());
-        email.setText(user.getEmail());
-        gender.setText(user.getGender());
-        goal.setText(user.getFitnessGoals());
-        setProfileFitnessGoals(user.getGender(), user.getFitnessGoals());
-        currCalIntake.setText(String.valueOf(user.getCaloriesToBurnPerDay()));
+        initializeUserProfileData();
 
         logOutButton = (Button) profileView.findViewById(R.id.logOutButton);
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +161,18 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void initializeUserProfileData()
+    {
+        name.setText(user.getFirstName() + " " + user.getLastName());
+        email.setText(user.getEmail());
+        gender.setText(user.getGender());
+        goal.setText(user.getFitnessGoals());
+        foodCalories.setText(String.valueOf(user.getFoodCalories()));
+        exerciseCaloriesBurned.setText(String.valueOf(user.getExerciseCalories()));
+        setProfileFitnessGoals(user.getGender(), user.getFitnessGoals());
+        currCalIntake.setText(String.valueOf(user.getCaloriesToBurnPerDay()));
     }
 
     private void setProfileFitnessGoals(String gender, String selectedFitnessGoals)

@@ -47,6 +47,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_GENDER = "gender";
     private static final String KEY_FITNESS_GOALS = "fitness_goals";
     private static final String KEY_CALORIES_BURNED_PER_DAY = "caloriesToBurnPerDay";
+    private static final String KEY_FOOD_CALORIES = "food_calories";
+    private static final String KEY_EXERCISE_CALORIES = "exercise_calories";
 
     // Recipe Table name
     private static final String TABLE_RECIPE = "Recipe";
@@ -79,6 +81,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_GENDER + " TEXT,"
                 + KEY_FITNESS_GOALS + " TEXT,"
                 + KEY_CALORIES_BURNED_PER_DAY + " FLOAT, "
+                + KEY_FOOD_CALORIES + " FLOAT, "
+                + KEY_EXERCISE_CALORIES + " FLOAT, "
                 + "UNIQUE (" + KEY_EMAIL + ") ON CONFLICT ROLLBACK)"; //helps avoid duplicates
 
         String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPE + "("
@@ -124,6 +128,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_GENDER, user.getGender());
         values.put(KEY_FITNESS_GOALS, user.getFitnessGoals());
         values.put(KEY_CALORIES_BURNED_PER_DAY, user.getCaloriesToBurnPerDay());
+        values.put(KEY_FOOD_CALORIES, user.getFoodCalories());
+        values.put(KEY_EXERCISE_CALORIES, user.getExerciseCalories());
 
         try {
             db.insertOrThrow(TABLE_USER, null, values);
@@ -145,6 +151,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_FITNESS_GOALS, user.getFitnessGoals());
         values.put(KEY_CALORIES_BURNED_PER_DAY, user.getCaloriesToBurnPerDay());
+        values.put(KEY_FOOD_CALORIES, user.getFoodCalories());
+        values.put(KEY_EXERCISE_CALORIES, user.getExerciseCalories());
 
         // updating row
         db.update(TABLE_USER, values, KEY_EMAIL + " = ?",
@@ -156,13 +164,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
 
-        Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_EMAIL, KEY_PASSWORD, KEY_GENDER, KEY_FITNESS_GOALS, KEY_CALORIES_BURNED_PER_DAY}, KEY_EMAIL + "=?",
+        Cursor cursor = db.query(TABLE_USER, new String[] { KEY_ID, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_EMAIL, KEY_PASSWORD, KEY_GENDER, KEY_FITNESS_GOALS, KEY_CALORIES_BURNED_PER_DAY, KEY_FOOD_CALORIES, KEY_EXERCISE_CALORIES}, KEY_EMAIL + "=?",
                 new String[] {email}, null, null, null, null);
 
         if(cursor.getCount() != 0) {
             cursor.moveToFirst();
 
-            User retUser = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7));
+            User retUser = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getFloat(8), cursor.getFloat(9));
             retUser.setId(cursor.getInt(0));
 
             return retUser;
