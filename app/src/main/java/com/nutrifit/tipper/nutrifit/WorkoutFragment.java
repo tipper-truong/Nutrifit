@@ -29,6 +29,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -176,6 +177,7 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         return wFragment;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -194,72 +196,81 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         activityRunning = true;
         user = getUserData();
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-             /* Displaying Google Maps on Fragment UI */
-            mapView = (MapView) record_workout_view.findViewById(R.id.map);
-            saveInstanceState = savedInstanceState;
-            mapView.onCreate(savedInstanceState);
-            mapView.onResume();
-            if (checkPlayServices()) {
-                Log.v("Success", "Building Google API Client...");
-                buildGoogleApiClient();
-            }
-            mapView.getMapAsync(this);
-
-
-            // DURATION || STOPWATCH
-            recordButton = (Button) record_workout_view.findViewById(R.id.recordButton);
+        // DURATION || STOPWATCH
+        recordButton = (Button) record_workout_view.findViewById(R.id.recordButton);
             /* CODE CITATION FOR STOPCLOCK: Android Programming Concepts Pg 566-569 */
-            recordButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!startTime) {
-                        // user wants to start time
-                        googleMap.clear(); // reset map
-                        points.clear(); // reset list of LatLng points
-                        resetTimer(); // reset timer
-                        distance.setText("0.00");
-                        currPace.setText("00:00");
-                        caloriesWkout.setText("0");
-                        startTime = true; // time has started
-                        startTimerAndLocationTracking();
-                    } else {
-                        // user wants to stop time
-                        stopTimerAndLocationTracking();
-                        steps = 0;
-                        startTime = false; // time has stopped
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!startTime) {
+                    // user wants to start time
+                    googleMap.clear(); // reset map
+                    points.clear(); // reset list of LatLng points
+                    resetTimer(); // reset timer
+                    distance.setText("0.00");
+                    currPace.setText("00:00");
+                    caloriesWkout.setText("0");
+                    startTime = true; // time has started
+                    startTimerAndLocationTracking();
+                } else {
+                    // user wants to stop time
+                    stopTimerAndLocationTracking();
+                    steps = 0;
+                    startTime = false; // time has stopped
 
-                        User dbUser = db.getUser(user.getEmail());
-                        float remaining = 0; // Goal - Food + Exercise = Remaining
-                        float exerciseCal = dbUser.getExerciseCalories();
-                        if(exerciseCal == 0) {
-                            user.setExerciseCalories(Float.valueOf(caloriesWkout.getText().toString()));
-                            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
-                            user.setCaloriesToBurnPerDay(remaining);
-                            db.updateUser(user);
-                            saveUserData(getActivity(), user);
-                        } else {
-                            exerciseCal += Float.valueOf(caloriesWkout.getText().toString());
-                            user.setExerciseCalories(exerciseCal);
-                            remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
-                            user.setCaloriesToBurnPerDay(remaining);
-                            db.updateUser(user);
-                            saveUserData(getActivity(), user);
-                        }
+                    User dbUser = db.getUser(user.getEmail());
+                    float remaining = 0; // Goal - Food + Exercise = Remaining
+                    float exerciseCal = dbUser.getExerciseCalories();
+                    if(exerciseCal == 0) {
+                        user.setExerciseCalories(Float.valueOf(caloriesWkout.getText().toString()));
+                        remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
+                        user.setCaloriesToBurnPerDay(remaining);
+                        db.updateUser(user);
+                        saveUserData(getActivity(), user);
+                    } else {
+                        exerciseCal += Float.valueOf(caloriesWkout.getText().toString());
+                        user.setExerciseCalories(exerciseCal);
+                        remaining = dbUser.getCaloriesToBurnPerDay() - dbUser.getFoodCalories() + user.getExerciseCalories();
+                        user.setCaloriesToBurnPerDay(remaining);
+                        db.updateUser(user);
+                        saveUserData(getActivity(), user);
                     }
                 }
-            });
+            }
+        });
 
-            duration = (TextView) record_workout_view.findViewById(R.id.duration);
-            watchTime = WatchTime.getInstance();
-            mHandler = new Handler();
-
-            SharedPreferences settings;
-            settings = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            Gson gson = new Gson();
-            String userObj = settings.getString(PREFS_NAME, null);
-            user = gson.fromJson(userObj, User.class);
+          /* Displaying Google Maps on Fragment UI */
+        mapView = (MapView) record_workout_view.findViewById(R.id.map);
+        saveInstanceState = savedInstanceState;
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        if (checkPlayServices()) {
+            Log.v("Success", "Building Google API Client...");
+            buildGoogleApiClient();
         }
+
+        if(checkLocationPermission()) {
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Log.v("Permission", "Location Enabled");
+                mapView.getMapAsync(this);
+            }
+        } else {
+            Log.v("Permission", "Location was disabled");
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();
+        }
+
+
+        duration = (TextView) record_workout_view.findViewById(R.id.duration);
+        watchTime = WatchTime.getInstance();
+        mHandler = new Handler();
+
+        SharedPreferences settings;
+        settings = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String userObj = settings.getString(PREFS_NAME, null);
+        user = gson.fromJson(userObj, User.class);
+
         return record_workout_view;
     }
 
@@ -768,6 +779,43 @@ public class WorkoutFragment extends Fragment implements SensorEventListener, On
         String userObj = settings.getString(PREFS_NAME, null);
         User retUser = gson.fromJson(userObj, User.class);
         return retUser;
+    }
+
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.title_location_permission)
+                        .setMessage(R.string.text_location_permission)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                       REQUEST_FINE_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_FINE_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
