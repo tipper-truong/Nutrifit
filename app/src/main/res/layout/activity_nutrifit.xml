@@ -31,4 +31,5 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/bottom_navigation_main" />
+
 </android.support.constraint.ConstraintLayout>

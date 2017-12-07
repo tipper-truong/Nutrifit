@@ -177,6 +177,7 @@ public class SearchFragment extends Fragment  implements SensorEventListener {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Toast toast = Toast.makeText(getActivity(), "Added " + query + " to your recipe search list", Toast.LENGTH_LONG);
