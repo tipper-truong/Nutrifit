@@ -104,6 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                     Intent i = new Intent(SignUpActivity.this, SignInActivity.class);
                     startActivity(i);
+                    finish();
 
                     db.close();
 
